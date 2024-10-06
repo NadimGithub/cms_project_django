@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Staff report{% endblock title %}
+{% block stylesheets %}
+
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    {% if messages %}
+    <div id="message-alert" class="alert alert-info">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+  {% endif %}
+
+        <div class="table-responsive text-nowrap">
+            <form method="post" action="{% url 'staff_attendance_report'%}" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="status" value="Approved">
+                <button type="submit" class="btn btn-success btn-sm">Attendance Report</button>
+            </form>
+            <form method="post" action="{% url 'staff_leave_report'%}" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="status" value="Approved">
+                <button type="submit" class="btn btn-success btn-sm">Leave Report</button>
+            </form>
+
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+        setTimeout(function() {
+          var messageAlert = document.getElementById("message-alert");
+          if (messageAlert) {
+            messageAlert.style.display = "none"; // Hide the message
+          }
+        }, 2000); // 3000ms = 3 seconds
+      });// 3 seconds delay before fading out
+</script>
+{% endblock javascripts %}

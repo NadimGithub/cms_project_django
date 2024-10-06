@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Institute List</title>
+</head>
+<body>
+    <h1>Institute List</h1>
+    <a href="{% url 'institute_create' %}">Add New Institute</a>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %} 
+
+    <ul>
+        {% for institute in institutes %}
+            <li>
+                <a href="{% url 'institute_detail' institute.pk %}">{{ institute.name }}</a>
+                <a href="{% url 'institute_update' institute.pk %}">Edit</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

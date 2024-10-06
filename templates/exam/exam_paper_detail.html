@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exam Paper {{ paper.pk }}</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Exam Paper {{ paper.pk }}</h1>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Subject ID</td>
+            <td>{{ paper.subject_id }}</td>
+        </tr>
+        <tr>
+            <td>Marks Total</td>
+            <td>{{ paper.marks_total }}</td>
+        </tr>
+        <tr>
+            <td>Exam ID</td>
+            <td>{{ paper.exam_id }}</td>
+        </tr>
+        <tr>
+            <td>Questions</td>
+            <td>{{ paper.questions }}</td>
+        </tr>
+    </table>
+    <a href="{% url 'exam_paper_update' paper.pk %}">Edit</a>
+    <a href="{% url 'exam_paper_list' %}">Back to List</a>
+</body>
+</html>

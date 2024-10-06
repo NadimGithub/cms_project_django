@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{%block title%}Add Institute{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+
+            <main class="contents px-5 py-5">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3>this is main content attendence</h3>
+                    </div> 
+                   
+                                     <!-----Add form ------>
+                                     <div class="container mt-5">
+                                        <h2 class="mb-4">Library Form</h2>
+                                        <form method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <!-- Row 1 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="book_name" class="form-label">Book Name</label>
+                                                    <input type="text" class="form-control" id="book_name" name="book_name" value="{{ form.book_name.value }}" required>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="course_id" class="form-label">Course Name</label>
+                                                    <select class="form-select"id="course_id" name="course_id" required>
+                                                        {% for courses in course %}
+                                                        <option value="{{courses.id}}" {% if course.id == form.course_id.value %}selected{% endif %}>{{courses.name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="author" class="form-label">Author</label>
+                                                    <input type="text" class="form-control" id="author" name="author" value="{{ form.author.value }}" required>
+                                                 
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="category" class="form-label">Catagory</label>
+                                                    <select class="form-select" id="category" name="category" required>
+                                                        <option value="text"{% if form.category.value == 'text' %}selected{% endif %}>Text</option>
+                                                        <option value="Refrance"{% if form.category.value == 'refrance' %}selected{% endif %}>Refrance</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                
+                                            <!-- Row 2 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="publish_date" class="form-label">Publish Date</label>
+                                                    <input type="date" class="form-control" id="publish_date" name="publish_date" value="{{ form.publish_date.value|date:'Y-m-d' }}" required>
+                                                  
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="copies_available" class="form-label">Copies Available</label>
+                                                    <input type="number" class="form-control" id="copies_available" name="copies_available" value="{{ form.copies_available.value }}" required>
+                                                   
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="isbn" class="form-label">ISBN (Code)</label>
+                                                    <input type="text" class="form-control" id="isbn" name="isbn" value="{{ form.isbn.value }}" required>
+                                                    
+                                                </div>
+                                            </div>
+                                
+                                            <!-- Row 3 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="language" class="form-label">Language</label>
+                                                    <select class="form-select" id="language" name="language" required>
+                                                        <option value="" disabled selected>Select Language</option>
+                                                        <option value="english"{% if form.language.value == 'english' %}selected{% endif %}>English</option>
+                                                        <option value="spanish"{% if form.language.value == 'spanish' %}selected{% endif %}>Spanish</option>
+                                                        <option value="french"{% if form.language.value == 'french' %}selected{% endif %}>French</option>
+                                                        <option value="german"{% if form.language.value == 'german' %}selected{% endif %}>German</option>
+                                                    </select>
+                                                    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="condition" class="form-label">Condition</label>
+                                                    <select class="form-select" id="condition" name="condition" required>
+                                                        <option value="" disabled selected>Select Condition</option>
+                                                        <option value="new"{% if form.condition.value == 'new' %}selected{% endif %}>New</option>
+                                                        <option value="used"{% if form.condition.value == 'used' %}selected{% endif %}>Used</option>
+                                                        <option value="damaged"{% if form.condition.value == 'damaged' %}selected{% endif %}>Damaged</option>
+                                                    </select>
+                                                    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="self_location" class="form-label">Shelf Location</label>
+                                                    <input type="text" class="form-control" id="self_location" name="self_location" value="{{ form.self_location.value }}" required>
+                                                    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="book_images" class="form-label">Profile Image</label>
+                                                    <input type="file" class="form-control" id="book_images" name="book_images" value="{{ form.book_images.value }}" required> 
+                                                </div>
+                                            </div>
+                                
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+   
+                                    {% endblock content %} 
+  
+                                    {% block javascripts %}
+                                    
+                                    {% endblock javascripts %}    

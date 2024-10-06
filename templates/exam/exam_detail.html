@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Student Details{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h2>Student Profile</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <p>Course ID: {{ exam.course_id }}</p>
+                    <p>Subject ID: {{ exam.subject_id }}</p>
+                    <p>Date: {{ exam.date }}</p>
+                    <p>Time: {{ exam.time }}</p>
+                    <p>Location: {{ exam.location }}</p>
+                    <p>Duration: {{ exam.duration }}</p>
+                    <p>Type: {{ exam.type }}</p>
+                    <p>Status: {{ exam.status }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-center">
+            <div class="row">
+                <div class="col">
+                    <a class="btn btn-secondary w-100" href="">
+                        <i class="bi bi-pen"></i> Edit
+                    </a>
+                </div>
+                <div class="col">
+                    <a class="btn btn-danger w-100" href="#">
+                        <i class="bx bx-trash me-1"></i> Delete
+                    </a>
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary w-100" onclick="window.print()">
+                        Print
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exam {{ exam.pk }}</title>
+</head>
+<body>
+    <h1>Exam {{ exam.pk }}</h1>
+   
+    <a href="{% url 'exam_update' exam.pk %}">Edit</a>
+    <a href="{% url 'exam_list' %}">Back to List</a>
+</body>
+</html>

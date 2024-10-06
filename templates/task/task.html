@@ -1,0 +1,70 @@
+               
+{% extends "base.html" %}
+{%block title%}Add Institute{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+            <main class="contents px-5 py-5">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3>this is main content attendence</h3>
+                    </div> 
+                   
+                                     <!-----Add form ------>
+                                     <div class="container mt-5">
+                                        <h2 class="mb-4">Task Form</h2>
+                                        <form id="myForm" method="POST" novalidate>
+                                            {% csrf_token %}
+                                            <!-- Row 1 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="task" class="form-label">Task Name</label>
+                                                    <input type="text" class="form-control" id="task" name="task" placeholder="Enter Task Name" required>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="priority" class="form-label">Priority</label>
+                                                    <select class="form-select" id="priority" name="priority" required>
+                                                        <option value="" disabled selected>Select Priority</option>
+                                                        <option value="low">Low</option>
+                                                        <option value="medium">Medium</option>
+                                                        <option value="high">High</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Row 2 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="assigned_to" class="form-label">Staff Name</label>
+                                                    <select class="form-select" id="assigned_to" name="assigned_to" required>
+                                                        <option value="" disabled selected>Select Staff Name</option>
+                                                        {% for staffs in staff %}
+                                                            <option value="{{ staffs.id }}">{{ staffs.id }}-{{ staffs.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                
+                                            <!-- Row 3 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="description" class="form-label">Description</label>
+                                                    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter Task Description" required></textarea>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="deadline" class="form-label">Deadline</label>
+                                                    <input type="date" class="form-control" id="deadline" name="deadline" required>
+                                                </div>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+           
+                                    {% endblock content %} 
+  
+                                    {% block javascripts %}
+                                    
+                                    {% endblock javascripts %}    

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ timetable.title }}</title>
+</head>
+<body>
+    <h1>{{ timetable.timetable }}</h1>
+    <p>Course ID: {{ timetable.course_id }}</p>
+    <p>Subject ID: {{ timetable.subject_id }}</p>
+    <p>Day: {{ timetable.day }}</p>
+    <p>Start Time: {{ timetable.start_time }}</p>
+    <p>End Time: {{ timetable.end_time }}</p>
+    <p>Location: {{ timetable.location }}</p>
+    <a href="{% url 'timetable_update' timetable.pk %}">Edit</a>
+    <a href="{% url 'timetable_list' %}">Back to List</a>
+</body>
+</html>

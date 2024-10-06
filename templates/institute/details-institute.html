@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Institute Details{% endblock title %}
+{% block stylesheets %}
+
+{% endblock stylesheets %}
+
+{% block content %} 
+
+<div class="container mt-5">
+    {% if messages %}
+  <div id="message-alert" class="alert alert-info">
+      {% for message in messages %}
+          {{ message }}
+      {% endfor %}
+  </div>
+{% endif %}
+    <div class="card">
+        <div class="card-header">
+            <h2 id="userName">{{ institute.name }}</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="{{ institute.logo.url }}" alt="Institute Logo" class="img-fluid rounded" id="userAvatar">
+                </div>
+                <div class="col-md-8">
+                    <h1><p>{{ institute.tagline }}</p></h1>
+                    <p>ID: {{ institute.id }}</p>
+                    <p>Name: {{ institute.name }}</p>
+                    <p>State: </p>
+                    <p>Address: {{ institute.address }}  {{ institute.village }}{{ institute.city }} {{ institute.district }} {{ institute.state }} {{ institute.pincode }}</p>
+                    <p>Mobile No: {{ institute.number }}</p>
+                    <p>Email: {{ institute.email }}</p>
+                    <p>Type: {{ institute.type }}</p>
+                    <p>Status: {{ institute.status }}</p>
+                    <p>Affiliation: {{ institute.affiliation }}</p>
+                  
+
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-center">
+            <div class="row">
+                {% comment %} <div class="col">
+                    <a href="{% url 'institute_update' pk=institute.pk %}" class="btn btn-warning w-100">Edit</a>
+
+                </div> {% endcomment %}
+                <div class="col">
+                    <form action="{% url 'institute_update' pk=institute.pk %}">
+                        {% csrf_token %}
+                        <button class="btn btn-secondaryw-100" type="submit">
+                            <i class="bx bx-trash me-1"></i> Edit
+                        </button>
+                    </form>
+                </div>
+                <div class="col">
+                    <form action="{% url 'institute_toggle_status' pk=institute.pk %}" method="POST" onsubmit="return confirm('Are you sure you want to delete this institute?');">
+                        {% csrf_token %}
+                        <button class="btn btn-danger w-100" type="submit">
+                            <i class="bx bx-trash me-1"></i> Delete
+                        </button>
+                    </form>
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary w-100" onclick="window.print()">
+                        Print
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+        setTimeout(function() {
+          var messageAlert = document.getElementById("message-alert");
+          if (messageAlert) {
+            messageAlert.style.display = "none"; // Hide the message
+          }
+        }, 2000); // 3000ms = 3 seconds
+      }); 
+</script>
+{% endblock javascripts %}

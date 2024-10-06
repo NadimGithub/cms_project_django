@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{%block title%}Add Student{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+
+            <main class="contents px-5 py-5">
+                {% if messages %}
+                <div id="message-alert" class="alert alert-info">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+              {% endif %}
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3></h3>
+
+                        <div class="container-fluid py-2">
+                            <div class="row">
+                              <div class="col-xs-12 ">
+                                
+                                <nav>
+                                <hr style="bottom: 5px;">
+                                  <div class="nav nav-tabs nav-fill" style="text-align: center;" id="nav-tab" role="tablist">
+                                    <a class="nav-item nav-link Active" style="color: white; font-size:18px; font-weight: bold;" id="nav-home-tab" data-toggle="tab" href="{%url 'student_create'%}" role="tab" aria-controls="nav-home" aria-selected="true"><i class='bx bxs-user-plus' ></i> ADD STUDENT</a>
+                                    <a class="nav-item nav-link" style="color: white; font-size:18px; font-weight: bold;" id="nav-profile-tab" data-toggle="tab" href="{%url 'student_details_create'%}" role="tab" aria-controls="nav-profile" aria-selected="false"><i class='bx bxs-user-detail' ></i> STUDENT DETAILS</a>
+                                    <a class="nav-item nav-link" style="color: white; font-size:18px; font-weight: bold;" id="nav-contact-tab" data-toggle="tab" href="{%url 'student_tempaddress'%}" role="tab" aria-controls="nav-contact" aria-selected="false"><i class='bx bxs-home' ></i> ADDRESS</a>
+                                    <a class="nav-item nav-link" style="color: white; font-size:18px; font-weight: bold;" id="nav-about-tab" data-toggle="tab" href="{%url 'documents'%}" role="tab" aria-controls="nav-about" aria-selected="false"><i class='bx bxs-cloud-download'></i> Upload Document</a>
+                                  </div>
+                                </nav>
+
+                                 </div> 
+                   
+                                     <!-----Add form ------>
+                                     <div class="container mt-5">
+                                        <h2 class="mb-4" style="color: white;">ADD STUDENT</h2>
+                                        <form action="{% url "student_create" %}" method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <!-- Row 1 -->
+                                            <div class="row mb-3">
+                                              <div class="col-md-4">
+                                                    <label for="first_name" class="form-label">First Name</label>
+                                                    <input type="text" class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" id="first_name" name="first_name" value="{{ form.first_name.value|default_if_none:'' }}" required>
+                                                    {% if form.first_name.errors %}
+                                                    <div class="invalid-feedback">
+                                                        {{ form.first_name.errors.0 }}
+                                                    </div>
+                                                {% endif %}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="middle_name" class="form-label">Middle Name</label>
+                                                    <input type="text" class="form-control {% if form.middle_name.errors %}is-invalid{% endif %}" id="middle_name" name="middle_name" value="{{ form.middle_name.value|default_if_none:'' }}">
+                                                    {% if form.middle_name.errors %}
+                                                    <div class="invalid-feedback">
+                                                        {{ form.middle_name.errors.0 }}
+                                                    </div>
+                                                {% endif %}
+                                                </div>
+                                                <div class="col-md-4">
+                                                  <label for="last_name" class="form-label">Last Name</label>
+                                                  <input type="text" class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" id="last_name" name="last_name" value="{{ form.last_name.value|default_if_none:'' }}" required>
+                                                  {% if form.last_name.errors %}
+                                                    <div class="invalid-feedback">
+                                                        {{ form.last_name.errors.0 }}
+                                                    </div>
+                                                {% endif %}
+                                              </div>
+                                            </div>
+                                
+                                            <!-- Row 2 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="number" class="form-label">Contact Number</label>
+                                                    <input type="tel" class="form-control {% if form.number.errors %}is-invalid{% endif %}" id="number" name="number" value="{{ form.number.value|default_if_none:'' }}" pattern="\d{10}" maxlength="10" inputmode="numeric" required>
+                                                    {% if form.number.errors %}
+                                                    <div class="invalid-feedback">
+                                                        {{ form.number.errors.0 }}
+                                                    </div>
+                                                {% endif %}
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <label for="email" class="form-label">Email</label>
+                                                    <input type="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" id="email" name="email" value="{{ form.email.value|default_if_none:'' }}" required>
+                                                    {% if form.email.errors %}
+                                                    <div class="invalid-feedback">
+                                                        {{ form.email.errors.0 }}
+                                                    </div>
+                                                {% endif %}
+                                                </div>
+                                            </div>
+                                
+                                            <!-- Row 3 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="gender" class="form-label">Gender</label>
+                                                    <select class="form-select" id="gender" name="gender" required>
+                                                        <option value="" disabled selected>Select Gender</option>
+                                                        <option value="M"{% if not form.gender.value == "M"%}selected{% endif %}>Male</option>
+                                                        <option value="F"{% if not form.gender.value == "F"%}selected{% endif %}>Female</option>
+                                                        <option value="O"{% if not form.gender.value == "O"%}selected{% endif %}>Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="profile_image" class="form-label">Profile Image</label>
+                                                    <input type="file" class="form-control" id="profile_image" name="profile_image" placeholder="Enter Last Name" required>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3" >
+                                                <div class="col-md-4">
+                                                     <button type="submit" class="btn btn-primary">Submit</button>
+                                                     <button type="next" href="{%url 'student_details_create'%}" class="btn btn-primary">next page</button>
+                                                </div>
+                                                {% comment %} <div class="col-md-4">
+                                                    
+                                                </div> {% endcomment %}
+                                            </div>
+                                        </form>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    </main>
+            <!-- Footer -->
+<!-- Footer -->
+{% endblock content %} 
+  
+{% block javascripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+    setTimeout(function() {
+      var messageAlert = document.getElementById("message-alert");
+      if (messageAlert) {
+        messageAlert.style.display = "none"; // Hide the message
+      }
+    }, 3000); // 3000ms = 3 seconds
+  });
+</script>
+{% endblock javascripts %}   

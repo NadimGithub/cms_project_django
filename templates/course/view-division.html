@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block title %}Division List{% endblock title %}
+{% block stylesheets %}
+<style>
+    .card-header {
+        display: flex;
+        align-items: center;
+        position: relative; /* Keeps the header aligned */
+    }
+    
+  .search-container {
+    position: absolute; /* Allows absolute positioning */
+    left: 50%;
+    transform: translateX(-50%); /* Centers the search field */
+    width: 600px; /* Fixed width for the search bar */
+    color: #f8f9fa; /* Light background color (you can change this) */
+    padding: 10px; /* Optional: adds padding around the search input */
+    border-radius: 2.25rem; /* Optional: adds border radius to the container */
+}
+    
+    .form-control {
+        border-radius: 2.25rem; /* Adjust as needed */
+    }
+    
+    .btn {
+        border-radius: 2.25rem; /* Add border radius to the button */
+        margin-left: 10px; /* Space between input and button */
+    }
+    
+</style>
+{% endblock stylesheets %}
+{% block content %}
+<div class="container-fluid py-5">
+    {% if messages %}
+    <div id="message-alert" class="alert alert-info">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Filter Form -->
+    <div class="card mb-4">
+        <h5 class="card-header">Filter Division Records</h5>
+        <div class="card-body">
+            <form method="GET" class="row align-items-center justify-content-center">
+                <div class="row w-100 justify-content-center">
+                    <div class="col-md-3 mb-3">
+                        <label for="course" class="form-label">Course</label>
+                        <input type="text" name="course" id="course" class="form-control" placeholder="Enter course" value="{{ course_query }}">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="year" class="form-label">Year</label>
+                        <input type="text" name="year" id="year" class="form-control" placeholder="Enter year" value="{{ year_query }}">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="semester" class="form-label">Semester</label>
+                        <input type="text" name="semester" id="semester" class="form-control" placeholder="Enter semester" value="{{ semester_query }}">
+                    </div>
+                    <div class="col-md-3 mb-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Division List Table -->
+    <div class="card">
+        <div class="d-flex align-items-center card-header">
+            <h5 class="mb-0">Division View</h5>
+            <div class="search-container">
+                <form method="GET" class="d-inline-flex justify-content-center">
+                    <input type="text" name="q" class="form-control" value="{{ search_query }}" placeholder="Search" style="width: 600px;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="card-body">
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Division ID</th>
+                        <th>Division Name</th>
+                        <th>Course</th>
+                        <th>Year</th>
+                        <th>Semester</th>
+                        <th>Status</th>
+                        <th>Create By</th> 
+                        <th>Action</th>
+                        
+                       
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for division in divisions %}
+                    <tr>
+                        <td>{{ division.id }}</td>
+                        <td>{{ division.name }}</td>
+                        <td>{{ division.course.name }}</td>
+                        <td>{{ division.year }}</td>
+                        <td>{{ division.semester }}</td>
+                        <td>{{ division.status }}</td>
+                        <td>{{ division.submitted_by}}</td>
+                        <td>
+                            <a href="{% url 'division_update' division.pk %}" class="btn btn-sm btn-primary">
+                                <i class="bi bi-pen"></i> Edit
+                            </a>
+                            <a href="#" class="btn btn-sm btn-danger" 
+                               onclick="return confirm('Are you sure you want to delete this division?');">
+                                <i class="bi bi-trash"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination Links -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if divisions.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ search_query }}&page={{ divisions.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+                
+                {% for num in divisions.paginator.page_range %}
+                <li class="page-item {% if divisions.number == num %}active{% endif %}">
+                    <a class="page-link" href="?q={{ search_query }}&page={{ num }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+                
+                {% if divisions.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ search_query }}&page={{ divisions.next_page_number }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+  // Wait for the DOM to be fully loaded
+  document.addEventListener("DOMContentLoaded", function() {
+    // Set a timeout to hide the message after 2 seconds (2000 milliseconds)
+    setTimeout(function() {
+      var messageAlert = document.getElementById("message-alert");
+      if (messageAlert) {
+        messageAlert.style.display = "none"; // Hide the message
+      }
+    }, 2000); // 2000ms = 2 seconds
+  });
+</script>
+{% endblock javascripts %}

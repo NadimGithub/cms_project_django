@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Add Exam{% endblock title %}
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<main class="contents px-5 py-5">
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3>Exam</h3>
+        </div>
+
+        <!-- Add form -->
+        <div class="container mt-5">
+            <h2 class="mb-4">Exam Form</h2>
+            <form action="#" method="POST">
+                {% csrf_token %}
+                <!-- Row 1 -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="course_id" class="form-label">Course Name</label>
+                        <select class="form-select" id="course_id" name="course_id">
+                            {% for courses in all_courses %}
+                                <option value="{{ courses.id }}" {% if courses.id == form.course_id.value %}selected{% endif %}>{{ courses.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="sub_id" class="form-label">Subject</label>
+                        <select class="form-select" id="sub_id" name="sub_id">
+                            {% for subject in all_subjects %}
+                                <option value="{{ subject.id }}" {% if subject.id == form.sub_id.value %}selected{% endif %}>{{ subject.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" value="{{ form.date.value|date:'Y-m-d' }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="time" class="form-label">Time</label>
+                        <input type="time" class="form-control" id="time" name="time" value="{{ form.time.value|time:'H:i:s' }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="location" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" name="location" value="{{ form.location.value }}" placeholder="Enter Location" required>
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="duration" class="form-label">Duration</label>
+                        <input type="text" class="form-control" id="duration" name="duration" value="{{ form.duration.value }}" placeholder="Enter Duration" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="type" class="form-label">Type</label>
+                        <select class="form-select" id="type" name="type">
+                            <option value="theory" {% if form.type.value == 'theory' %}selected{% endif %}>Theory</option>
+                            <option value="practical" {% if form.type.value == 'practical' %}selected{% endif %}>Practical</option>
+                            <option value="viva" {% if form.type.value == 'viva' %}selected{% endif %}>Viva</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="scheduled" {% if form.status.value == 'scheduled' %}selected{% endif %}>Scheduled</option>
+                            <option value="completed" {% if form.status.value == 'completed' %}selected{% endif %}>Completed</option>
+                            <option value="canceled" {% if form.status.value == 'canceled' %}selected{% endif %}>Canceled</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

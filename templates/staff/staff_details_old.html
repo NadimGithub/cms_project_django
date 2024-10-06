@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ staff.name }}</title>
+</head>
+<body>
+    <h1>{{ staff.name }}</h1>
+    <table border="1">
+        <tr>
+            <th>Field</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>{{ staff.address }}</td>
+        </tr>
+        <tr>
+            <td>State</td>
+            <td>{{ staff.state }}</td>
+        </tr>
+        <tr>
+            <td>District</td>
+            <td>{{ staff.district }}</td>
+        </tr>
+        <tr>
+            <td>Pincode</td>
+            <td>{{ staff.pincode }}</td>
+        </tr>
+        <tr>
+            <td>Number</td>
+            <td>{{ staff.number }}</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>{{ staff.email }}</td>
+        </tr>
+        <tr>
+            <td>Type</td>
+            <td>{{ staff.type }}</td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td>{{ staff.status }}</td>
+        </tr>
+        <tr>
+            <td>DOB</td>
+            <td>{{ staff.dob }}</td>
+        </tr>
+        <tr>
+            <td>Blood Group</td>
+            <td>{{ staff.blood_group }}</td>
+        </tr>
+        <tr>
+            <td>Category</td>
+            <td>{{ staff.category }}</td>
+        </tr>
+        <tr>
+            <td>Role</td>
+            <td>{{ staff.role }}</td>
+        </tr>
+    </table>
+    <a href="{% url 'staff_update' staff.pk %}">Edit</a>
+    <a href="{% url 'staff_list' %}">Back to List</a>
+</body>
+</html>

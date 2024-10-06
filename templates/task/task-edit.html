@@ -1,0 +1,69 @@
+               
+{% extends "base.html" %}
+{%block title%}Add Institute{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+            <main class="contents px-5 py-5">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3>this is main content attendence</h3>
+                    </div> 
+                   
+                                     <!-----Add form ------>
+                                     <div class="container mt-5">
+                                        <h2 class="mb-4">Task Form</h2>
+                                        <form id="myForm" method="POST" novalidate>
+                                            {% csrf_token %}
+                                            <!-- Row 1 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="task" class="form-label">Task Name</label>
+                                                    <input type="text" class="form-control" id="task" name="task" value="{{ forms.task.value }}" placeholder="Enter Task Name" required>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="priority" class="form-label">Priority</label>
+                                                    <select class="form-select" id="priority" name="priority" required>
+                                                        <option value="low"{% if forms.priority.value == 'low' %}selected{% endif %}>Low</option>
+                                                        <option value="medium"{% if forms.priority.value == 'medium' %}selected{% endif %}>Medium</option>
+                                                        <option value="high"{% if forms.priority.value == 'high' %}selected{% endif %}>High</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Row 2 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="assigned_to" class="form-label">Staff Name</label>
+                                                    <select class="form-select" id="assigned_to" name="assigned_to">
+                                                        {% for staffs in staffs %}
+                                                            <option value="{{ staffs.id }}" {% if staffs.id == forms.assigned_to.value %}selected{% endif %}>{{ staffs.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                               
+                                            </div>
+                                
+                                            <!-- Row 3 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="description" class="form-label">Description</label>
+                                                    <textarea class="form-control" id="description" name="description" required>{{ forms.description.value }}</textarea>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="deadline" class="form-label">Deadline</label>
+                                                    <input type="date" class="form-control" id="deadline" name="deadline" value="{{ forms.deadline.value|date:'Y-m-d' }}" required>
+                                                </div>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+           
+                                    {% endblock content %} 
+  
+                                    {% block javascripts %}
+                                    
+                                    {% endblock javascripts %}    

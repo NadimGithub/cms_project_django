@@ -1,0 +1,144 @@
+{% extends "base.html" %} {%block title%}Add admission{%endblock title%} {%block stylesheets %} {% endblock stylesheets %} {% block content %}
+<main class="contents px-5 py-5">
+  <div class="container-fluid">
+    <div class="mb-3">
+      <h3>Create new  Admission</h3>
+    </div>
+
+    <!-----Add form ------>
+    <div class="container mt-5">
+      <h2 class="mb-4">Admission Form</h2>
+      <form
+        method="POST"
+        action="{% url 'admission_create' %}"
+        enctype="multipart/form-data"
+      >
+        {% csrf_token %}
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="studentId" class="form-label">Student ID</label>
+            <input
+              type="text"
+              class="form-control"
+              id="student_id"
+              name="student_id"
+              placeholder="Enter Student ID"
+              required
+            />
+          
+          <div class="col-md-4">
+            <label for="courseId" class="form-label">Course ID</label>
+            <input
+              type="text"
+              class="form-control"
+              id="course_id"
+              name="course_id"
+              placeholder="Enter Course ID"
+              required
+            />
+           
+        </div>
+
+        <!-- Row 2 -->
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select" id="status" name="status" required>
+              <option value="" disabled selected>Select Status</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="documents" class="form-label">Documents</label>
+            <input
+              type="file"
+              class="form-control"
+              id="documents"
+              name="documents"
+              multiple
+              required
+            />
+            
+          </div>
+          <div class="col-md-4">
+            <label for="admissionBy" class="form-label">Admission By</label>
+            <input
+              type="text"
+              class="form-control"
+              id="admission_by"
+              name="admission_by"
+              placeholder="Enter Admission By"
+              required
+            />
+           
+          </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="feesStructure" class="form-label">Fees Structure</label>
+            <input
+              type="text"
+              class="form-control"
+              id="fees_structure"
+              name="fees_structure"
+              placeholder="Enter Fees Structure"
+              required
+            />
+           
+          <div class="col-md-4">
+            <label for="feesPaid" class="form-label">Fees Paid</label>
+            <input
+              type="text"
+              class="form-control"
+              id="fees_paid"
+              name="fees_paid"
+              placeholder="Enter Fees Paid"
+              required
+            />
+           
+          <div class="col-md-4">
+            <label for="dateOfApply" class="form-label">Date of Apply</label>
+            <input
+              type="date"
+              class="form-control"
+              id="date_of_apply"
+              name="date_of_apply"
+              required
+            />
+          
+        </div>
+
+        <!-- Row 4 (Additional for Transaction Type) -->
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="transactionType" class="form-label"
+              >Transaction Type</label
+            >
+            <select
+              class="form-select"
+              id="transaction_type"
+              name="transaction_type"
+              required
+            >
+              <option value="" disabled selected>
+                Select Transaction Type
+              </option>
+              <option value="cash">Cash</option>
+              <option value="credit">Credit</option>
+              <option value="online">Online</option>
+            </select>
+          
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</main>
+
+{% endblock content %} {% block javascripts %} {% endblock javascripts %}

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .profile-card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+            border-radius: 10px;
+            background-color: #fff;
+            padding: 20px;
+        }
+
+        .profile-card img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #007bff;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .profile-card .profile-button {
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .profile-card .profile-button:hover {
+            background-color: #0056b3;
+        }
+
+        .profile-card .labels {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .profile-card .form-control {
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+
+        .profile-card .form-control:focus {
+            box-shadow: none;
+            border-color: #007bff;
+        }
+
+        .modal .form-label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="profile-card text-center">
+                    <img class="rounded-circle mb-3" src="{{ profile_image }}" alt="Profile Image">
+                    <span class="font-weight-bold">{{ first_name }} {{ last_name }}</span>
+                    <span class="text-black-50">{{ email }}</span>
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-3">
+                            <label class="labels">Mobile No:</label>
+                            <p>{{ mobile }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="labels">Address:</label>
+                            <p>{{ address }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="labels">Username:</label>
+                            <p>{{ username }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="labels">Role:</label>
+                            <p>{{ role }}</p>
+                        </div>
+                    </div>
+                    <button id="openUpdateProfileModal" class="btn btn-lg btn-primary profile-button">Update Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for updating profile -->
+    <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="updateProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateProfileModalLabel">Update Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateProfileForm" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="profile_image" class="form-label">Profile Image:</label>
+                            <input type="file" class="form-control" id="profile_image" name="profile_image">
+                            <img id="profile_image_preview" src="" alt="Profile Image" class="mt-2" style="max-width: 100%; display: none;">
+                        </div>
+                        <div class="mb-3">
+                            <label for="first_name" class="form-label">First Name:</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ form.first_name.value }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="last_name" class="form-label">Last Name:</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ form.email.value }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="mobile" class="form-label">Mobile:</label>
+                            <input type="text" class="form-control" id="mobile" name="mobile">
+                        </div>
+                      
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Open modal and populate form data
+            $('#openUpdateProfileModal').on('click', function() {
+                $.ajax({
+                    method: 'GET',
+                    success: function(data) {
+                        $('#first_name').val(data.first_name);
+                        $('#last_name').val(data.last_name);
+                        $('#email').val(data.email);
+                        $('#mobile').val(data.mobile);
+                        $('#address').val(data.address);
+                        $('#role').val(data.role);
+                        if (data.profile_image) {
+                            $('#profile_image_preview').attr('src', data.profile_image).show();
+                        } else {
+                            $('#profile_image_preview').hide();
+                        }
+                        const modal = new bootstrap.Modal(document.getElementById('updateProfileModal'));
+                        modal.show();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching user data:', error);
+                    }
+                });
+            });
+
+            // Form submission
+            $('#updateProfileForm').on('submit', function(event) {
+                event.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    url: '{% url "update_profile" %}',
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        location.reload(); // Reload the page to reflect changes
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error updating profile:', error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

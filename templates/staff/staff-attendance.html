@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Staff Attendance{% endblock title %}
+{% block stylesheets %}
+<style>
+    .date-input {
+        background-color: #000; /* Black background */
+        color: #fff;            /* White text */
+        border: 1px solid #333; /* Darker border for contrast */
+        pointer-events: none;   /* Prevent interaction */
+        cursor: not-allowed; 
+    }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<main class="contents px-5 py-5">
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3></h3>
+        </div>
+        <div class="card">     
+            <div class="card-body py-2" style="background-color: #343a40;;">
+                <h5 class="card-title" style="color:#f5931b; text-align: left;font-size: 24px;">Staff Attendance</h5>
+        <div class="container mt-5">
+            <form action="{% url 'staff_attendance' %}" method="POST">
+                {% csrf_token %}
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="staff_id" class="form-label">Staff Name</label>
+                        <select class="form-select" id="staff_id" name="staff_id" required>
+                            <option value="" disabled selected>Select Staff Name</option>
+                            {% for staff in staffs %}
+                                <option value="{{ staff.id }}">{{ staff.id }}-{{ staff.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control date-input" id="date" name="date" value="{{ today }}"  >
+                    </div>
+                    <div class="col-md-4">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="" disabled selected>Select status</option>
+                            <option value="Present">Present</option>
+                            <option value="Absent">Absent</option>
+                        </select>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="reset" class="btn btn-secondary me-2" id="clearButton">Clear</button>
+                        <button type="submit" class="btn btn-primary" style="background-color:#f5931b; color: white;">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+            </div>
+        </div>
+        </div>
+{% endblock content %}
+{% block javascripts %}
+{% endblock javascripts %}

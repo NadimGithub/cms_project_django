@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% block title %}Add Exam{% endblock title %}
+
+{% block stylesheets %}
+<style>
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
+    }
+    .form-label {
+        margin-bottom: 0.5rem;
+    }
+    .form-control {
+        margin-top: 0.25rem;
+    }
+    .collapse {
+        margin-top: 1rem;
+    }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container mt-5">
+    {% if messages %}
+    <div id="message-alert" class="alert alert-info">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+  {% endif %}
+    
+    <div class="card">
+        <div class="card-header">
+            <h2 class="mb-4">Exam Paper</h2>
+        </div>
+        <div class="card-body">
+            <form id="examForm" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- Other form fields for ExamPaper -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="name" class="form-label">Exam Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Exam Name" required> 
+                    </div>
+                    <div class="col-md-4">
+                        <label for="course_id" class="form-label">Course</label>
+                        <select class="form-select" id="course_id" name="course" onchange="fetchYear(this.value); fetchSubjects(this.value)" required>
+                            <option value="" disabled selected>Select Course</option>
+                            {% for course in courses %}
+                                <option value="{{ course.id }}">{{ course.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="year" class="form-label">Year</label>
+                        <select class="form-select" id="year" name="year" onchange="fetchSemester(this.value)" required>
+                            <option value="" selected>Select Year</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="semester" class="form-label">Semester</label>
+                        <select class="form-select" id="semester" name="semester" onchange="fetchDivision(this.value)" required>
+                            <option value="" selected>Select Semester</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="division" class="form-label">Division</label>
+                        <select class="form-select" id="division" name="division" required>
+                            <option value="" selected>Select Division</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="sub_id" class="form-label">Subject</label>
+                        <select class="form-select" id="sub_id" name="subject" required>
+                            <option value="" disabled selected>Select Subject</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="staff_id" class="form-label">Staff Name</label>
+                        <select class="form-select" id="staff_id" name="staff" required>
+                            <option value="" disabled selected>Select Staff</option>
+                            {% for staff in staffs %}
+                                <option value="{{ staff.id }}">{{ staff.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="time" class="form-label">Time</label>
+                        <input type="time" class="form-control" id="time" name="time" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="location" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" name="location" placeholder="Enter Location" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="duration" class="form-label">Duration</label>
+                        <input type="text" class="form-control" id="duration" name="duration" placeholder="Enter Duration" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="type" class="form-label">Type</label>
+                        <select class="form-select" id="type" name="type" required>
+                            <option value="" disabled selected>Select Type</option>
+                            <option value="theory">Theory</option>
+                            <option value="practical">Practical</option>
+                            <option value="viva">Viva</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="total_marks" class="form-label">Total Marks</label>
+                        <input type="number" class="form-control" id="total_marks" name="total_marks" min="0" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <label for="instructions" class="form-label">Instructions</label>
+                        <textarea class="form-control" id="instructions" name="instructions" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <button class="btn btn-secondary" type="button" id="addQuestionBtn">
+                        Add Question
+                    </button>
+                </div>
+
+
+                <div id="questionContainer"></div> <!-- Container for dynamic question inputs -->
+
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    function fetchYear(courseId) {
+        if (courseId) {
+            $.ajax({
+                url: "{% url 'fetch_years' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId
+                },
+                success: function(data) {
+                    $('#year').html(data);
+                }
+            });
+        }
+    }
+
+    function fetchSemester(year) {
+        var courseId = $('#course_id').val();
+        if (courseId && year) {
+            $.ajax({
+                url: "{% url 'fetch_semesters' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year
+                },
+                success: function(data) {
+                    $('#semester').html(data);
+                }
+            });
+        }
+    }
+
+    function fetchDivision(semester) {
+        var courseId = $('#course_id').val();
+        var year = $('#year').val();
+        if (courseId && year && semester) {
+            $.ajax({
+                url: "{% url 'fetch_divisions' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year,
+                    'semester': semester
+                },
+                success: function(data) {
+                    $('#division').html(data);
+                }
+            });
+        }
+    }
+
+    function fetchSubjects(courseId) {
+        if (courseId) {
+            $.ajax({
+                url: "{% url 'fetch_subjects' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId
+                },
+                success: function(data) {
+                    $('#sub_id').html(data);
+                }
+            });
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(function() {
+            var messageAlert = document.getElementById("message-alert");
+            if (messageAlert) {
+                messageAlert.style.display = "none";
+            }
+        }, 3000);
+    });
+
+   let questionCount = 1;
+
+
+document.getElementById('addQuestionBtn').addEventListener('click', () => {
+  
+    document.getElementById('questionContainer').insertAdjacentHTML('beforeend', `
+        <div class="card card-body mb-3">
+            <div class="row mb-3">
+                <div class="col-md-2">
+                    <input type="number" class="form-control question-no" name="question_no" placeholder="No" required>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" class="form-control question-text" name="question_text" placeholder="Question" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control question-marks" name="question_marks" min="0" placeholder="Marks" required>
+                </div>
+            </div>
+        </div>
+    `);
+    questionCount++;
+});
+
+// Optional: Function to loop through and log all questions
+const getAllQuestions = () => {
+    document.querySelectorAll('.question-no, .question-text, .question-marks').forEach(el => console.log(el.value));
+};
+</script>
+{% endblock javascripts %}

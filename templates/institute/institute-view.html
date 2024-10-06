@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Add Institute{% endblock title %}
+{% block stylesheets %}
+    <!-- Your custom styles here -->
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="card">
+        <h5 class="card-header">Institutes Table</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                    <tr class="text-nowrap">
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Mobile No</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for institute in institutes %}
+                    <tr>
+                        <td>{{ institute.id }}</td>
+                        <td><a href="{% url 'institute_detail' institute.pk %}" class="text-decoration-none">{{ institute.name }}</a></td>
+                        <td>{{ institute.address }}</td>
+                        <td>{{ institute.number }}</td>
+                        <td>{{ institute.email }}</td>
+                      
+                            
+                                <td>
+                                    <a href="{% url 'institute_update' pk=institute.pk %}" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-pen"></i> Edit
+                                    </a>
+                                    
+                                </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+    <!-- Your custom scripts here -->
+{% endblock javascripts %}

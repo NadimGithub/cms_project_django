@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Edit Course{% endblock title %}
+{% block stylesheets %}
+<!-- Add any specific stylesheets if needed -->
+{% endblock stylesheets %}
+
+{% block content %}
+<main class="contents px-5 py-5">
+    {% if messages %}
+    <div id="message-alert" class="alert alert-info">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3>Edit Course</h3>
+        </div>
+        <div class="container mt-5">
+            <form method="POST" action="{% url 'course_update' course.pk %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ form.name.value }}" required pattern="^[a-zA-Z\s]+$">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="institute_id" class="form-label">Institute</label>
+                        <input type="text" class="form-control" id="institute_id" name="institute_id" value="{{ inst_id }} - {{ inst_name }}" disabled>
+                    </div>
+                </div>
+
+                <!-- Second Row -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="start_date" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" id="start_date" name="start_date" value="{{ form.start_date.value|date:'Y-m-d' }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="intake_capacity" class="form-label">Intake Capacity</label>
+                        <input type="number" class="form-control" id="intake_capacity" name="intake_capacity" value="{{ form.intake_capacity.value }}" min="1" required>
+                    </div>
+                </div>
+
+                <!-- Third Row -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="duration" class="form-label">Duration (Month)</label>
+                        <select class="form-select" id="duration" name="duration" required>
+                            <option value="" disabled>Select duration</option>
+                            <option value="1" {% if form.duration.value == "1" %}selected{% endif %}>1 Month</option>
+                            <option value="3" {% if form.duration.value == "3" %}selected{% endif %}>3 Months</option>
+                            <option value="6" {% if form.duration.value == "6" %}selected{% endif %}>6 Months</option>
+                            <option value="12" {% if form.duration.value == "12" %}selected{% endif %}>12 Months</option>
+                        </select>
+                    </div>
+                    </div>
+              
+                
+                <!-- Submit and Reset Buttons -->
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="reset" class="btn btn-secondary">Clear Form</button>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+    // Wait for the DOM to be fully loaded
+    document.addEventListener("DOMContentLoaded", function() {
+        // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+        setTimeout(function() {
+            var messageAlert = document.getElementById("message-alert");
+            if (messageAlert) {
+                messageAlert.style.display = "none"; // Hide the message
+            }
+        }, 2000); // 2000ms = 2 seconds
+    });
+</script>
+{% endblock javascripts %}

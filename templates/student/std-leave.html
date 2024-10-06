@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Student Leave{% endblock title %}
+{% block stylesheets %}
+<style>
+    
+</style>
+{% endblock stylesheets %}
+
+{% block content %} 
+<main class="contents px-5 py-5">
+    {% if messages %}
+    <div id="message-alert" class="alert alert-info">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+  {% endif %}
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3></h3>
+        </div> 
+        <div class="card">     
+            <div class="card-body py-2" style="background-color: #343a40;;">
+                <h5 class="card-title" style="color:#f5931b; text-align: left;font-size: 24px;">Add Leave</h5>
+        <div class="container mt-5">
+            <form action="{% url 'student_leave_create' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="reason" class="form-label">Reason</label>
+                        <input type="text" class="form-control" id="reason" name="reason" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="start" class="form-label">Start</label>
+                        <input type="date" class="form-control" id="start" name="start" required>
+                    </div>
+                </div>
+            
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="end" class="form-label">End</label>
+                        <input type="date" class="form-control" id="end" name="end" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            
+        </div>
+    </div>
+        </div>
+        </div>
+</main>
+{% endblock content %} 
+  
+{% block javascripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+        setTimeout(function() {
+          var messageAlert = document.getElementById("message-alert");
+          if (messageAlert) {
+            messageAlert.style.display = "none"; // Hide the message
+          }
+        }, 2000); // 3000ms = 3 seconds
+      }); 
+</script>
+{% endblock javascripts %}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #343a40; /* Dark background color */
+            color: #f8f9fa; /* Light text color for contrast */
+            padding: 20px; /* Padding for small devices */
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .card {
+            background-color: #212529; /* Dark card background */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            padding: 20px;
+        }
+
+        .form-control {
+            background-color: #2a2d31; /* Slightly lighter input background */
+            color: #f8f9fa; /* Light text color */
+            border: 1px solid #555; /* Subtle border */
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #007bff; /* Blue border on focus */
+        }
+
+        .form-label {
+            color: #ff6600; /* Orange label color for emphasis */
+            display: block;
+            line-height: 1.2; /* Adjusts label to split into two rows for a stacked effect */
+        }
+
+        .btn-register {
+            background-color: #ff6600; /* Orange color for Register button */
+            border: none;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 20px; /* Adds spacing above the button */
+            color: #fff; /* White text */
+            font-size: 18px;
+        }
+
+        .btn-register:hover {
+            background-color: #cc5200; /* Darker orange on hover */
+            transform: scale(1.05); /* Slight zoom effect on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center" style="color: #cc5200; font-weight: bold;">Registration</h2>
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <form action="{% url 'register' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter your first name">
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter your last name">
+                    </div>
+                    <div class="form-group">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username">
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address">
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile" class="form-label">Mobile Number</label>
+                        <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Enter your phone number">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="role" class="form-label">Role</label>
+                            <select class="form-control" id="role" name="role">
+                                
+                                <option value="admin">Admin</option>
+                                <option value="principal">Principal</option>
+                                <option value="HOD">HOD</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="password1" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter your password">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="cpassword2" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="cpassword2" name="password2" placeholder="Confirm your password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="address" name="address" placeholder="Enter your address">
+                    </div>
+                    <div class="form-group">
+                        <label for="profile_image" class="form-label">Profile Image</label>
+                        <input type="file" class="form-control-file" id="profile_image" name="profile_image">
+                    </div>
+                    <button type="submit" class="btn btn-register btn-block">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,90 @@
+               
+{% extends "base.html" %}
+{%block title%}Add Institute{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+
+            <main class="contents px-5 py-5">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3>fees Structure</h3>
+                    </div> 
+
+                                     <div class="container mt-5">
+                                        <h2 class="mb-4">fees Structure</h2>
+                                        <form id="myForm"method="POST" novalidate>
+                                            {% csrf_token %}
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="courseId" class="form-label">Course</label>
+                                                    <select class="form-select" id="course_id" name="course_id" required>
+                                                        <option value="" disabled selected>Select Course</option>
+                                                        {% for course in courses %}
+                                                        <option value="{{course.id}}">{{course.name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="cast" class="form-label">Cast</label>
+                                                    <select class="form-select" id="cast" name="cast" required>
+                                                        <option value="" disabled selected>Select catagory</option>
+                                                        <option value="general">General</option>
+                                                        <option value="sc">SC</option>
+                                                        <option value="obc">OBC</option>
+                                                        <option value="vjnt">VJNT</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="is_scholarship" class="form-label">Is Scholarship</label>
+                                                    <select class="form-select" id="is_scholarship" name="is_scholarship" required>
+                                                        <option value="" disabled selected>Select</option>
+                                                        <option value="yes">Yes</option>
+                                                        <option value="no">No</option>
+                                                    </select>
+                                                    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="amount" class="form-label">Amount</label>
+                                                    <input type="number" class="form-control" id="amount" name="amount" placeholder="Enter Amount" required>
+                                                   
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="year" class="form-label">Year</label>
+                                                <select class="form-select" id="year" name="year" required>
+                                                    <option value="" disabled selected>Select Status</option>
+                                                    <option value="first year">First Year</option>
+                                                    <option value="second year">Second Year</option>
+                                                    <option value="third year">Third Year</option>
+                                                    <option value="last year">Last Year</option>
+                                                </select>
+                                            </div>
+                                              
+                                                <div class="col-md-4">
+                                                    <label for="name" class="form-label">Name</label>
+                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" required> 
+                                                </div>
+                                                <div class="col-md-4 mt-3">
+                                                    <label for="is_gap" class="form-label">Is Gap</label>
+                                                    <select class="form-select" id="iis_gapsGap" name="is_gap" required>
+                                                        <option value="" disabled selected>Select</option>
+                                                        <option value="yes">Yes</option>
+                                                        <option value="no">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+                                    {% endblock content %} 
+  
+                                    {% block javascripts %}
+                                    
+                                    {% endblock javascripts %}    
+                                    

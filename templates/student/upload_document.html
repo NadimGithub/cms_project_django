@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Upload Document{% endblock title %}
+
+{% block content %}
+<main class="contents px-5 py-5">
+    {% if messages %}
+            <div id="message-alert" class="alert alert-info">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+          {% endif %}
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3>UPLOAD DOCUMNETS</h3>
+
+            <div class="container-fluid py-2">
+                <div class="row">
+                  <div class="col-xs-12 ">
+                    <nav>
+                        <hr>
+                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link Active" style="color: white; font-size:18px; font-weight: bold;" id="nav-home-tab" data-toggle="tab" href="{%url 'student_create'%}" role="tab" aria-controls="nav-home" aria-selected="true"><i class='bx bxs-user-plus' ></i> ADD STUDENT</a>
+                            <a class="nav-item nav-link" style="color: white; font-size:18px; font-weight: bold;" id="nav-profile-tab" data-toggle="tab" href="{%url 'student_details_create'%}" role="tab" aria-controls="nav-profile" aria-selected="false"><i class='bx bxs-user-detail' ></i> STUDENT DETAILS</a>
+                            <a class="nav-item nav-link" style="color: white; font-size:18px; font-weight: bold;" id="nav-contact-tab" data-toggle="tab" href="{%url 'student_tempaddress'%}" role="tab" aria-controls="nav-contact" aria-selected="false"><i class='bx bxs-home' ></i> ADDRESS</a>
+                            <a class="nav-item nav-link" style="color: white; font-size:18px; font-weight: bold;" id="nav-about-tab" data-toggle="tab" href="{%url 'documents'%}" role="tab" aria-controls="nav-about" aria-selected="false"><i class='bx bxs-cloud-download'></i> Upload Document</a>
+                          </div>
+                    </nav>
+        </div> 
+        <!-- Form Card -->
+        <div class="container mt-5">
+        
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-4">UPLOAD DOCUMENT</h2>
+                </div>
+                <div class="card-body">
+                    <form id="myForm" method="POST" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                        <!-- Student Selection -->
+                        <div class="mb-3">
+                            <label for=" student" class="form-label">Select Student</label>
+                            <select class="form-select" id=" student" name=" student">
+                                <option value="">-- Select Student --</option>
+                                {% for student in students %}
+                                    <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Add Document Button -->
+                        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                            <button type="button" id="addDocumentBtn" class="btn btn-secondary">Add Document</button>
+                        </div>
+
+                        <!-- Documents Section -->
+                        <div id="documentFieldsContainer" class="row mb-3"></div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</main>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+    document.getElementById('addDocumentBtn').addEventListener('click', function () {
+        var container = document.getElementById('documentFieldsContainer');
+
+        var newRow = document.createElement('div');
+        newRow.className = 'row mb-3';
+
+        // Document Name Column
+        var docNameCol = document.createElement('div');
+        docNameCol.className = 'col-md-4';
+        docNameCol.innerHTML = `
+            <label for="document_name" class="form-label">Document Name</label>
+            <input type="text" class="form-control" name="document_name" placeholder="Enter Document Name" required>
+        `;
+
+        // Document File Upload Column
+        var docFileCol = document.createElement('div');
+        docFileCol.className = 'col-md-4';
+        docFileCol.innerHTML = `
+            <label for="document" class="form-label">Upload Document</label>
+          <input type="file" class="form-control" name="document" multiple required>
+        `;
+
+        // Append columns to the new row
+        newRow.appendChild(docNameCol);;
+        newRow.appendChild(docFileCol);
+
+        // Append the new row to the container
+        container.appendChild(newRow);
+    });
+
+        document.addEventListener("DOMContentLoaded", function() {
+        // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+        setTimeout(function() {
+          var messageAlert = document.getElementById("message-alert");
+          if (messageAlert) {
+            messageAlert.style.display = "none"; // Hide the message
+          }
+        }, 3000); // 3000ms = 3 seconds
+      });
+
+</script>
+{% endblock javascripts %}

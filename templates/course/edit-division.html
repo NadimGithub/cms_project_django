@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Edit Course{% endblock title %}
+
+{% block stylesheets %}
+    <!-- Add any custom styles here -->
+{% endblock stylesheets %}
+
+{% block content %}
+<main class="contents px-5 py-5">
+    {% if messages %}
+    <div id="message-alert" class="alert alert-info">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+  {% endif %}
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3></h3>
+        </div>
+        <div class="card">
+            <div class="card-body py-2" style="background-color: #343a40;">
+                <h5 class="card-title" style="color:#f5931b; text-align: left; font-size: 24px;">Add Division</h5>
+                <div class="container mt-5">
+                    <form method="POST"enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="course" class="form-label">Course ID</label>
+                                <select class="form-select"id="course" name="course" >
+                                    <option value="" selected>Select Course</option>
+                                    {% for course in courses %}
+                                    <option value="{{course.id}}"{% if course.id == form.course.value %}selected{% endif %}>{{course.name}}</option>
+                                    {% endfor %}
+                                </select>
+                                {% if form.course.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.course.errors.0 }}
+                                </div>
+                            {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="year" class="form-label">Year</label>
+                                <select class="form-select" id="year" name="year" required>
+                                    <option value="" selected>Select year</option>
+                                    <option value="1st year"{% if form.year.value == "1st year"%}selected{% endif %}>1st year</option>
+                                    <option value="2nd year"{% if form.year.value == "2st year"%}selected{% endif %}>2st year</option>
+                                    <option value="3rd year"{% if form.year.value == "3st year"%}selected{% endif %}>3st year</option>
+                                    <option value="4th year"{% if form.year.value == "4st year"%}selected{% endif %}>4st year</option>
+                                </select>
+                                {% if form.year.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.year.errors.0 }}
+                                </div>
+                            {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="semester" class="form-label">Semester</label>
+                                <select class="form-select" id="semester" name="semester" required>
+                                    <option value="" selected>Select semester</option>
+                                    <option value="1 semester"{% if form.semester.value == "1 semester"%}selected{% endif %}>Semester 1</option>
+                                    <option value="2 semester"{% if form.semester.value == "2 semester"%}selected{% endif %}>Semester 2</option>
+                                    <option value="3 semester"{% if form.semester.value == "3 semester"%}selected{% endif %}>Semester 3</option>
+                                    <option value="4 semester"{% if form.semester.value == "4 semester"%}selected{% endif %}>Semester 4</option>
+                                    <option value="5 semester"{% if form.semester.value == "5 semester"%}selected{% endif %}>Semester 5</option>
+                                    <option value="6 semester"{% if form.semester.value == "6 semester"%}selected{% endif %}>Semester 6</option>
+                                    <option value="7 semester"{% if form.semester.value == "7 semester"%}selected{% endif %}>Semester 7</option>
+                                    <option value="8 semester"{% if form.semester.value == "8 semester"%}selected{% endif %}>Semester 8</option>
+                                </select>
+                                {% if form.semester.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.semester.errors.0 }}
+                                </div>
+                            {% endif %}
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="name" class="form-label">Division Name</label>
+                                <input type="text" class="form-control {% if form.name.errors %}is-invalid{% endif %} " id="name" name="name" value="{{ form.name.value|default_if_none:'' }}" >
+                                {% if form.name.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.name.errors.0}}
+                                </div>
+                            {% endif %}
+                            </div>
+                        </div>
+                        <!-- Submit and Reset Buttons -->
+                        <button type="reset" class="btn btn-secondary me-2" id="clearButton">Clear</button>
+                        <button type="submit" class="btn btn-primary" style="background-color:#f5931b; color: white;">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+    setTimeout(function() {
+      var messageAlert = document.getElementById("message-alert");
+      if (messageAlert) {
+        messageAlert.style.display = "none"; // Hide the message
+      }
+    }, 2000); // 3000ms = 3 seconds
+  });
+</script>
+{% endblock javascripts %}

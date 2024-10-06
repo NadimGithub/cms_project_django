@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Result {{ result.pk }}</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Result {{ result.pk }}</h1>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Student ID</td>
+            <td>{{ result.std_id }}</td>
+        </tr>
+        <tr>
+            <td>Course ID</td>
+            <td>{{ result.course_id }}</td>
+        </tr>
+        <tr>
+            <td>Exam ID</td>
+            <td>{{ result.exam_id }}</td>
+        </tr>
+        <tr>
+            <td>Marks</td>
+            <td>{{ result.marks }}</td>
+        </tr>
+        <tr>
+            <td>Grade</td>
+            <td>{{ result.grade }}</td>
+        </tr>
+    </table>
+    <a href="{% url 'result_update' result.pk %}">Edit</a>
+    <a href="{% url 'result_list' %}">Back to List</a>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Update Fees Structure{% endblock title %}
+{% block content %}
+<main class="contents px-5 py-5">
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3>Update Fees Structure</h3>
+        </div> 
+
+        <div class="container mt-5">
+            <h2 class="mb-4">Fees Structure Form</h2>
+            <form  method="POST" novalidate>
+                {% csrf_token %}
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="course_id" class="form-label">Course</label>
+                        <select class="form-select" id="course_id" name="course_id" required>
+                            <option value="" disabled>Select Course</option>
+                            {% for course in courses %}
+                            <option value="{{ course.id }}" {% if form.instance.course_id.id == course.id %}selected{% endif %}>{{ course.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="cast" class="form-label">Cast</label>
+                        <select class="form-select" id="cast" name="cast" required>
+                            <option value="" disabled>Select category</option>
+                            <option value="general" {% if form.instance.cast == "general" %}selected{% endif %}>General</option>
+                            <option value="sc" {% if form.instance.cast == "sc" %}selected{% endif %}>SC</option>
+                            <option value="obc" {% if form.instance.cast == "obc" %}selected{% endif %}>OBC</option>
+                            <option value="vjnt" {% if form.instance.cast == "vjnt" %}selected{% endif %}>VJNT</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="is_scholarship" class="form-label">Is Scholarship</label>
+                        <select class="form-select" id="is_scholarship" name="is_scholarship" required>
+                            <option value="" disabled>Select</option>
+                            <option value="yes" {% if form.is_scholarship.value == "yes" %}selected{% endif %}>Yes</option>
+                            <option value="no" {% if form.instance.is_scholarship == "no" %}selected{% endif %}>No</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="amount" class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="amount" name="amount" value="{{ form.instance.amount }}" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="year" class="form-label">Year</label>
+                        <select class="form-select" id="year" name="year" required>
+                            <option value="" disabled>Select Year</option>
+                            <option value="first year" {% if form.instance.year == "first year" %}selected{% endif %}>First Year</option>
+                            <option value="second year" {% if form.instance.year == "second year" %}selected{% endif %}>Second Year</option>
+                            <option value="third year" {% if form.instance.year == "third year" %}selected{% endif %}>Third Year</option>
+                            <option value="last year" {% if form.instance.year == "last year" %}selected{% endif %}>Last Year</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ form.instance.name }}" required>
+                    </div>
+                    <div class="col-md-4 mt-3">
+                        <label for="is_gap" class="form-label">Is Gap</label>
+                        <select class="form-select" id="is_gap" name="is_gap" required>
+                            <option value="" disabled>Select</option>
+                            <option value="yes" {% if form.instance.is_gap == "yes" %}selected{% endif %}>Yes</option>
+                            <option value="no" {% if form.instance.is_gap == "no" %}selected{% endif %}>No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock javascripts %}

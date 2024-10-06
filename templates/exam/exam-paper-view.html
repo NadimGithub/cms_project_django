@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Paper Layout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: black;
+        }
+
+        .question-paper {
+            background-color: white;
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative; 
+            box-sizing: border-box; 
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        /* Logo Container */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 15px; 
+        }
+
+        .circle-logo {
+            width: 100px; 
+            height: 100px;
+            border-radius: 50%; 
+            border: 1px solid #ddd; 
+            object-fit: cover; 
+        }
+
+        .tagline {
+            margin-top: 8px; 
+            font-size: 12px; 
+            color: #555; 
+        }
+
+      
+        .centered-paper-text {
+            text-align: center; 
+            font-size: 28px; 
+            font-family: 'Georgia', serif; 
+            color: #333; 
+            background: #f5f5f5; 
+            padding: 15px 30px; 
+            border: 1px solid #ccc; 
+            border-radius: 8px; 
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); 
+            margin: 15px auto; 
+            max-width: 500px; 
+        }
+
+        .logo img {
+            max-width: 100px;
+            height: auto;
+            align-items: start;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .instructions {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .instructions p {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .code-box {
+            text-align: right;
+            display: flex;
+    flex-direction: column; 
+    align-items: flex-start; 
+
+        }
+
+        hr {
+            border: 1px solid black;
+            margin: 20px 0;
+        }
+
+        .instructionss {
+            margin-bottom: 20px;
+        }
+
+        .instructionss h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .instructionss ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .instructionss ul li {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .questions {
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .question h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .questions ul {
+            margin: 0;
+            padding-left: 10px;
+        }
+
+        .marks {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+
+        .dotted-line {
+            border: none;
+            border-top: 2px dotted #333;
+            margin-top: 20px;
+        }
+
+
+        .marks {
+         float: right; 
+         font-size: 14px; 
+         font-weight: bold;
+          color: #333;
+          margin-left: 10px; 
+}
+
+        
+        @media screen and (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            h1 {
+                margin-bottom: 10px;
+                align-items: center;
+                text-align: center;
+            }
+
+            .instructions {
+                flex-direction: column;
+            }
+
+            .code-box {
+                text-align: center;
+                margin-top: 10px;
+            }
+
+            .question {
+                font-size: 14px;
+            }
+        }
+
+      
+        @media print {
+            body {
+                background-color: white;
+            }
+
+            .question-paper {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                border: 1px solid #000;
+                box-shadow: none;
+                padding: 20mm;
+                box-sizing: border-box;
+                page-break-after: always;
+            }
+
+            footer {
+                position: absolute;
+                bottom: 10mm;
+                width: 100%;
+                text-align: center;
+                border-top: 1px solid #000;
+            }
+
+            hr {
+                margin: 10mm 0;
+            }
+        }
+
+        .question-paper {
+            border: 1px solid #000; 
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="question-paper">
+        <header>
+            <div class="logo">
+                {% for institute in institute %}
+                <div class="logo-container">
+                    <img src="{{ institute.logo.url }}" alt="{{ institute.name }} Logo" class="circle-logo">
+                    <div class="tagline">{{ institute.tagline }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <h1 class="centered-paper-text">
+                {% for institute in institute %}
+                {{ institute.name }}
+                {% endfor %}
+            </h1>
+        </header>
+
+     
+
+        <section class="instructions">
+            <div>
+                <p><strong>Subject Name : </strong> {{ exam_paper.subject.name }}</p>
+                <p><strong>Prof Name : </strong> {{ exam_paper.staff.name }}</p>
+                <p><strong>Course : </strong> {{ exam_paper.course.name }}</p>
+                <p><strong>Semester : </strong> {{ exam_paper.semester }}</p>
+                <p><strong>Year : </strong> {{ exam_paper.year }}</p>
+                <p><strong>Division : </strong> {{ exam_paper.division }}</p>
+            </div>
+            <div class="code-box">
+                <p><strong>Total Marks : </strong> {{ exam_paper.total_marks }}</p>
+                <p><strong>Exam : </strong>{{ exam_paper.name}}</p>
+                <p><strong>Time : </strong> {{ exam_paper.time }}</p>
+                <p><strong>Date : </strong> {{ exam_paper.date }}</p>
+                <p><strong>Duration : </strong> {{ exam_paper.duration }}</p>
+                <p><strong>Type : </strong> {{ exam_paper.type }}</p>
+            </div>
+        </section>
+
+        <hr class="">
+
+        <section class="instructionss">
+            <h3 class="mb-3">Instructions:</h3>
+            <ul class="list-group list-group">
+                <li class="list-group-item">{{ exam_paper.instructions }}</li>
+            </ul>
+        </section>
+
+        <hr class="dotted-line">
+
+        <section class="questions">
+            <ul class="list-group list-group">
+                {% for question in questions %}
+                <h4>Q.{{ question.question_no }})  <strong>{{ question.question_text }}</strong>
+                <span class="marks">({{ question.question_marks }} Marks)</span>
+                </h4>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <footer class="" style="color: black; font-weight: bold; text-align: center; font-size: 15px;">
+          !!  Best of Luck !!
+        </footer>
+    </div>
+</body>
+</html>
+

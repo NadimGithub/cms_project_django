@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block title %}Add Fees{% endblock title %}
+
+{% block content %}
+<main class="contents px-5 py-5">
+    {% if messages %}
+    <div id="message-alert" class="alert alert-info">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3>Add Fees</h3>
+        </div>
+        <div class="container mt-5">
+            <h2 class="mb-4">Fees Form</h2>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="course" class="form-label">Course</label>
+                        <select class="form-select" id="course" name="course" onchange="fetchYear(this.value)" required>
+                            <option value="" disabled selected>Select Course</option>
+                            {% for course in courses %}
+                                <option value="{{ course.id }}" {% if form.course.value == course.id %}selected{% endif %}>{{ course.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="year" class="form-label">Year</label>
+                        <select class="form-select" id="year" name="year" required>
+                            <option value="" selected>Select Year</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="student" class="form-label">Student ID</label>
+                        <select class="form-select" id="student" name="student" required>
+                            <option value="" disabled selected>Select student</option>
+                            {% for student in students %}
+                            <option value="{{ student.id }}" {% if form.student.value == student.id %}selected{% endif %}>{{ student.id }} - {{ student.first_name }} {{ student.middle_name }} {{ student.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="amount" class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="amount" name="amount" value="{{ form.amount.value }}" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="fees_structure" class="form-label">Fees Structure</label>
+                        <select class="form-select" id="fees_structure" name="fees_structure" required>
+                            <option value="" disabled selected>Select Fees Structure</option>
+                            {% for fees_structure in structures %}
+                                <option value="{{ fees_structure.id }}" {% if form.fees_structure.value|stringformat:"s" == fees_structure.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ fees_structure.id }} - {{ fees_structure.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="fees_type" class="form-label">Fees Type</label>
+                        <input type="text" class="form-control" id="fees_type" name="fees_type" value="{{ form.fees_type.value }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" value="{{ form.date.value|date:'Y-m-d' }}" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="payment_type" class="form-label">Payment Type</label>
+                        <select class="form-select" id="payment_type" name="payment_type" required>
+                            <option value="" disabled selected>Select Payment Type</option>
+                            <option value="credit-card" {% if form.payment_type.value == "credit-card" %}selected{% endif %}>Credit Card</option>
+                            <option value="debit-card" {% if form.payment_type.value == "debit-card" %}selected{% endif %}>Debit Card</option>
+                            <option value="bank-transfer" {% if form.payment_type.value == "bank-transfer" %}selected{% endif %}>Bank Transfer</option>
+                            <option value="cash" {% if form.payment_type.value == "cash" %}selected{% endif %}>Cash</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="" disabled selected>Select Status</option>
+                            <option value="complete" {% if form.status.value == "complete" %}selected{% endif %}>Complete</option>
+                            <option value="pending" {% if form.status.value == "pending" %}selected{% endif %}>Pending</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="upload_document" class="form-label">Upload Document</label>
+                        <input type="file" class="form-control" id="upload_document" name="upload_document">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
+
+  
+                                    {% block javascripts %}
+                                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+                                    <script>
+                                        function fetchYear(courseId) {
+                                            if (courseId) {
+                                                $.ajax({
+                                                    url: "{% url 'fetch_years' %}",
+                                                    type: "GET",
+                                                    data: {
+                                                        'course_id': courseId
+                                                    },
+                                                    success: function (data) {
+                                                        $('#year').html(data);
+                                                        $('#year-container').show(); // Show year container after fetching the years
+                                                    }
+                                                });
+                                            }
+                                        }
+                                        
+                                        function fetchStudents() {
+                                            var courseId = $('#course').val();  // Use '#course' instead of '#hidden_course'
+                                            var year = $('#year').val();
+                                        
+                                            console.log("Course ID:", courseId);  // Debugging
+                                            console.log("Year:", year);           // Debugging
+                                        
+                                            if (courseId && year) {
+                                                $.ajax({
+                                                    url: "{% url 'fetch_students' %}",
+                                                    type: "GET",
+                                                    data: {
+                                                        'course_id': courseId,
+                                                        'year': year
+                                                    },
+                                                    success: function (data) {
+                                                        console.log("Student Data:", data);  // Debugging
+                                                        $('#student').html(data); // Populate the student select element
+                                                    },
+                                                    error: function (xhr, status, error) {
+                                                        console.error("AJAX Error:", status, error);  // Debugging
+                                                    }
+                                                });
+                                            }
+                                        }
+                                        
+                                    
+                                        // Trigger the student fetch function when both course and year are selected
+                                        $('#year').change(fetchStudents);
+                                        $('#course').change(fetchStudents);
+                                    
+                                        document.addEventListener("DOMContentLoaded", function() {
+                                        // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+                                        setTimeout(function() {
+                                          var messageAlert = document.getElementById("message-alert");
+                                          if (messageAlert) {
+                                            messageAlert.style.display = "none"; // Hide the message
+                                          }
+                                        }, 3000); // 3000ms = 3 seconds
+                                      });</script>
+                                    {% endblock javascripts %}    

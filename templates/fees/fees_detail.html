@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{%block title%}Add Institute{%endblock title%}
+{% block stylesheets %}
+
+{% endblock stylesheets %}
+
+{% block content %} 
+        <div class="container mt-5">
+            <div class="card">
+                <div class="card-header">
+                    <h2 id="userName">Fees Details</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="{{ fees.upload_document.url }}" alt="fees_documents" class="img-fluid rounded" id="fees_documents">
+                        </div>
+                        <div class="col-md-8">
+                            <p>Student ID: {{ fees.student_id.name}}</p>
+                            <p>course: {{ fees.course.name }}</p>
+                            <p>course: {{ fees.year }}</p>
+                            <p>Amount: {{ fees.amount }}</p>
+                            <p>Remaining Amount: {{ fees.remaining_amount }}</p>
+                            <p>Fees Structure: {{ fees.fees_structure.name}}</p>
+                            <p>Fees Type: {{ fees.fees_type }}</p>
+                            <p>Date: {{ fees.date }}</p>
+                            <p>Status: {{ fees.status }}</p>
+                            <p>Payment Type: {{ fees.payment_type }}</p>
+                            <p>Submitted By: {{ fees.submitted_by }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <div class="row">
+                        <div class="col">
+                            <a class="btn btn-secondary w-100"  href="{% url 'fees_update' fees.pk %}">
+                                <i class="bi bi-pen"></i> Edit
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-danger w-100" href="#">
+                                <i class="bx bx-trash me-1"></i> Delete
+                            </a>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary w-100" onclick="window.print()">
+                                Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+ 
+        {% endblock content %} 
+  
+        {% block javascripts %}
+        
+        {% endblock javascripts %}
+    
+   

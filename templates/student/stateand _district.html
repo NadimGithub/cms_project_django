@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State and District Dropdown</title>
+   
+</head>
+<body>
+    <main class="contents px-5 py-5">
+        <div class="container-fluid">
+            <div class="mb-3">
+                <h3>Temp Address</h3>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="temp_state" class="form-label">Select State</label>
+                    <select class="form-select" id="temp_state" name="temp_state" required>
+                        <option value="" disabled selected>Select State</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="district" class="form-label">Select District</label>
+                    <select class="form-select" id="district" name="district" required>
+                        <option value="" disabled selected>Select District</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data of states and districts
+            const statesAndDistricts = {
+                "Andhra Pradesh": ["Anantapur", "Chittoor", "East Godavari", "Guntur"],
+                "Arunachal Pradesh": ["Changlang", "Dibang Valley", "East Kameng", "East Siang"],
+                "Assam": ["Baksa", "Barpeta", "Biswanath", "Bongaigaon"],
+                "Bihar": ["Araria", "Arwal", "Aurangabad", "Banka"]
+            };
+
+            // Function to populate the states in the dropdown
+            const stateSelect = document.getElementById('temp_state');
+            Object.keys(statesAndDistricts).forEach(function(state) {
+                const option = document.createElement('option');
+                option.value = state;
+                option.textContent = state;
+                stateSelect.appendChild(option);
+            });
+
+            // Event listener for state dropdown change
+            stateSelect.addEventListener('change', function() {
+                const selectedState = stateSelect.value;
+                const districtSelect = document.getElementById('district');
+                
+                // Clear previous district options
+                districtSelect.innerHTML = '<option value="" disabled selected>Select District</option>';
+
+                // Populate district dropdown
+                if (selectedState in statesAndDistricts) {
+                    statesAndDistricts[selectedState].forEach(function(district) {
+                        const option = document.createElement('option');
+                        option.value = district;
+                        option.textContent = district;
+                        districtSelect.appendChild(option);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

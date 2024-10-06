@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Permanent Address{% endblock title %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+{% endblock stylesheets %}
+
+{% block content %}
+<main class="contents px-5 py-5">
+    {% if messages %}
+    <div id="message-alert" class="alert alert-info">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+  {% endif %}
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3>Permanent Address</h3>
+        </div>
+        <div class="container-fluid py-2">
+            <div class="row">
+              <div class="col-xs-12 ">
+                <nav>
+                    <hr>
+                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link Active" style="color: white; font-size:18px; font-weight: bold;" id="nav-home-tab" data-toggle="tab" href="{%url 'student_create'%}" role="tab" aria-controls="nav-home" aria-selected="true"><i class='bx bxs-user-plus' ></i> ADD STUDENT</a>
+                       
+                        <a class="nav-item nav-link" style="color: white; font-size:18px; font-weight: bold;" id="nav-profile-tab" data-toggle="tab" href="{%url 'student_details_create'%}" role="tab" aria-controls="nav-profile" aria-selected="false"><i class='bx bxs-user-detail' ></i> STUDENT DETAILS</a>
+                        <a class="nav-item nav-link" style="color: white; font-size:18px; font-weight: bold;" id="nav-contact-tab" data-toggle="tab" href="{%url 'student_tempaddress'%}" role="tab" aria-controls="nav-contact" aria-selected="false"><i class='bx bxs-home' ></i> ADDRESS</a>
+                        <a class="nav-item nav-link" style="color: white; font-size:18px; font-weight: bold;" id="nav-about-tab" data-toggle="tab" href="{%url 'documents'%}" role="tab" aria-controls="nav-about" aria-selected="false"><i class='bx bxs-cloud-download'></i> Upload Document</a>
+                      </div>
+                </nav>
+    </div> 
+        <!-- Add form -->
+        <div class="container-fluid mt-5">
+            <h2 class="mb-4">Permanent Address</h2>
+            <form id="studentForm" action="{% url 'student_permaddress' %}" method="POST" novalidate>
+                {% csrf_token %}
+                <!-- Form fields here -->
+                <!-- Row 1 -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="student" class="form-label">Student Name</label>
+                        <select class="form-select" id="student" name="student" required>
+                            <option value="" disabled selected>Select Student Name</option>
+                            {% for student in students %}
+                                <option value="{{ student.id }}">{{ student.first_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="mb-3">
+                        <label for="perm_address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="perm_address" name="perm_address" placeholder="Enter Address">
+                    </div>
+                    <div class="mb-3">
+                        <label for="perm_state" class="form-label">State</label>
+                        <input type="text" class="form-control" id="perm_state" name="perm_state" placeholder="Enter State">
+                    </div>
+                    <div class="mb-3">
+                        <label for="perm_city" class="form-label">City</label>
+                        <input type="text" class="form-control" id="perm_city" name="perm_city" placeholder="Enter City">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="mb-3">
+                        <label for="perm_district" class="form-label">District</label>
+                        <input type="text" class="form-control" id="perm_district" name="perm_district" placeholder="Enter District">
+                    </div>
+                    <div class="mb-3">
+                        <label for="perm_taluka" class="form-label">Taluka</label>
+                        <input type="text" class="form-control" id="perm_taluka" name="perm_taluka" placeholder="Enter Taluka">
+                    </div>
+                    <div class="mb-3">
+                        <label for="perm_pincode" class="form-label">Pincode</label>
+                        <input type="text" class="form-control" id="perm_pincode" name="perm_pincode" placeholder="Enter Pincode">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+    setTimeout(function() {
+      var messageAlert = document.getElementById("message-alert");
+      if (messageAlert) {
+        messageAlert.style.display = "none"; // Hide the message
+      }
+    }, 3000); // 3000ms = 3 seconds
+  });
+</script>
+{% endblock scripts %}
+

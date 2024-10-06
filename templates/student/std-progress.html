@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{%block title%}Add Institute{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+            <main class="contents px-5 py-5">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3>this is main content progress</h3>
+                    </div> 
+                   
+                                     <!-----Add form ------>
+                                     <div class="container mt-5">
+                                        <h2 class="mb-4">Student Progress Form</h2>
+                                        <form id="myForm" action="/submit-form" method="POST" novalidate>
+                                            <!-- Row 1 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="progressId" class="form-label">ID</label>
+                                                    <input type="text" class="form-control" id="progressId" name="progressId" placeholder="Enter ID" required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter the progress ID.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="studentId" class="form-label">Student ID</label>
+                                                    <input type="text" class="form-control" id="studentId" name="studentId" placeholder="Enter Student ID" required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter the student ID.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="courseId" class="form-label">Course ID</label>
+                                                    <input type="text" class="form-control" id="courseId" name="courseId" placeholder="Enter Course ID" required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter the course ID.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                
+                                            <!-- Row 2 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="marks" class="form-label">Marks</label>
+                                                    <input type="number" class="form-control" id="marks" name="marks" placeholder="Enter Marks" min="0" max="100" required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter marks between 0 and 100.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="grade" class="form-label">Grade</label>
+                                                    <input type="text" class="form-control" id="grade" name="grade" placeholder="Enter Grade" required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter the grade.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="status" class="form-label">Status</label>
+                                                    <select class="form-select" id="status" name="status" required>
+                                                        <option value="" disabled selected>Select Status</option>
+                                                        <option value="pass">Pass</option>
+                                                        <option value="fail">Fail</option>
+                                                        <option value="pending">Pending</option>
+                                                    </select>
+                                                    <div class="invalid-feedback">
+                                                        Please select the status.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                
+                                            <!-- Row 3 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-12">
+                                                    <label for="attendance" class="form-label">Attendance</label>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" id="attendanceBar" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+                                    {% endblock content %} 
+  
+                                    {% block javascripts %}
+                                    
+                                    {% endblock javascripts %}                                   
+                                      
+              

@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}Course Table{% endblock title %}
+{% block stylesheets %}
+    <!-- Your custom styles here -->
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    {% if messages %}
+    <div id="message-alert" class="alert alert-info">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="container-fluid py-5">
+    <div class="card mb-4">
+        <h5 class="card-header">Search Syllabus Records</h5>
+        <div class="card-body">
+            <form method="GET" class="row align-items-center">
+                <!-- Course Filter Dropdown -->
+                <div class="col-md-4 mb-3">
+                    <label for="courseFilter" class="form-label">Select Course</label>
+                    <select name="course_id" id="courseFilter" class="form-control">
+                        <option value="">-- All Courses --</option>
+                        {% for course in courses %}
+                            <option value="{{ course.id }}" {% if course.id == selected_course %}selected{% endif %}>{{ course.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="yearFilter" class="form-label">Select Year</label>
+                    <select name="year" id="yearFilter" class="form-control">
+                        <option value="">-- All Years --</option>
+                        {% for year in years %}
+                            <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- Search Input -->
+                <div class="col-md-4 mb-3">
+                    <label for="search" class="form-label">Search</label>
+                    <input type="text" name="search" id="search" class="form-control" placeholder="Search by name, type, etc." value="{{ search_query }}">
+                </div>
+
+                <div class="col-md-2 mb-3">
+                    <div class="d-flex justify-content-start mt-4">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        <button type="submit" class="btn btn-secondary ms-2" name="export">Export</button>
+                        
+                        <a href="{% url 'fees_list' %}" class="btn btn-secondary ms-2">Reset</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <h5 class="card-header">Course Table</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>student ID</th>
+                        <th>Course</th>
+                        <th>Year</th>
+                        <th>Amount</th>
+                        <th>Remaining Amount</th>
+                        <th>Date</th>
+                        <th>Payment Type</th>
+                        <th>Status</th>
+                            <th>Submitted By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fees in fees %}
+                <tr>
+                    <td>{{ fees.pk }}</td>
+                    <td>{{ fees.student.first_name}} {{ fees.student.middle_name}} {{ fees.student.last_name}}</td>
+                    <td>{{ fees.course.name}}</td>
+                    <td>{{ fees.year}}</td>
+                    <td>{{ fees.amount }}</td>
+                    <td>{{ fees.remaining_amount }}</td>
+                    <td>{{ fees.date }}</td>
+                    <td>{{ fees.payment_type }}</td>
+                    <td>{{ fees.status }}</td>
+                    <th>{{ fees.submitted_by}}</th>
+                  
+                    <td>
+                        <a href="{% url 'fees_detail' fees.pk %}">View</a> | 
+                        <a href="{% url 'fees_update' fees.pk %}">Edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if syllabuses.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?course_id={{ selected_course }}&subject_id={{ selected_subject }}&search={{ search_query }}&page={{ syllabuses.previous_page_number }}">Previous</a>
+                    </li>
+                {% endif %}
+                
+                {% for num in syllabuses.paginator.page_range %}
+                    <li class="page-item {% if syllabuses.number == num %}active{% endif %}">
+                        <a class="page-link" href="?course_id={{ selected_course }}&subject_id={{ selected_subject }}&search={{ search_query }}&page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endfor %}
+                
+                {% if syllabuses.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?course_id={{ selected_course }}&subject_id={{ selected_subject }}&search={{ search_query }}&page={{ syllabuses.next_page_number }}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<script>document.addEventListener("DOMContentLoaded", function() {
+    // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+    setTimeout(function() {
+      var messageAlert = document.getElementById("message-alert");
+      if (messageAlert) {
+        messageAlert.style.display = "none"; // Hide the message
+      }
+    }, 3000); // 3000ms = 3 seconds
+  });</script>
+{% endblock javascripts %}
+
+
+     
+         

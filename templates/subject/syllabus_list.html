@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syllabus List</title>
+</head>
+<body>
+    <h1>Syllabus List</h1>
+    <a href="{% url 'syllabus_create' %}">Add New Syllabus</a>
+    <ul>
+        {% for syllabus in syllabuses %}
+            <li>
+                <a href="{% url 'syllabus_detail' pk=syllabus.syllabus_id %}">{{ syllabus.title }}</a>
+                <a href="{% url 'syllabus_update' pk=syllabus.syllabus_id %}">Edit</a>
+            </li>
+        {% empty %}
+            <li>No syllabuses available.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

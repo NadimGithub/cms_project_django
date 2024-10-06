@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}Staff View{% endblock title %}
+{% block stylesheets %}
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    {% if messages %}
+    <div id="message-alert" class="alert alert-info">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="container-fluid py-5">
+    <div class="card mb-4">
+        <h5 class="card-header">Search Books</h5>
+        <div class="card-body">
+            <form method="GET" class="row align-items-center">
+                <!-- Course Filter Dropdown -->
+                <div class="col-md-4">
+                    <label for="course" class="form-label">Course</label>
+                    <select class="form-select" id="course" name="course">
+                        <option value="" disabled {% if not request.GET.course %}selected{% endif %}>Select Course</option>
+                        {% for course in courses %}
+                            <option value="{{ course.id }}" {% if request.GET.course == course.id|stringformat:"s" %}selected{% endif %}>{{ course.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            
+                <!-- Self Location Filter Dropdown -->
+                <div class="col-md-4">
+                    <label for="location" class="form-label">Self Location</label>
+                    <select class="form-select" id="location" name="location">
+                        <option value="" disabled {% if not request.GET.location %}selected{% endif %}>Select Self Location</option>
+                        {% for book in books %}
+                            <option value="{{ book.self_location }}" {% if request.GET.location == book.self_location %}selected{% endif %}>{{ book.self_location }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            
+                <!-- Search Input -->
+                <div class="col-md-4">
+                    <label for="search" class="form-label">Search</label>
+                    <input type="text" name="search" id="search" class="form-control" placeholder="Search by name, author, etc." value="{{ search_query }}">
+                </div>
+            
+                <!-- Buttons -->
+                <div class="col-md-2 mb-3">
+                    <div class="d-flex justify-content-start mt-4">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        <a href="{% url 'library_list' %}" class="btn btn-secondary ms-2">Reset</a>
+                    </div>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+    <div class="card">
+        <h5 class="card-header">Exam details</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead> 
+                    <tr>
+                        <th> id</th>
+                        <th>Book Name</th>
+                        <th>Author</th>
+                        <th>Course</th>
+                        <th>Category</th>
+                        <th>Publish Date</th>
+                        <th>Copies Available</th>
+                        <th>Self location</th>   
+                        <th>Action</th>          
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                    <tr>
+                        <td>{{ book.id}}</td>
+                        <td><a href="{% url 'library_detail' book.pk%}">{{ book.book_name}}</td>
+                        <td>{{ book.author}}</td>
+                        <td>{{ book.course_id.name}}</td>
+                        <td>{{ book.category}}</td>
+                        <td>{{ book.publish_date}}</td>
+                        <td>{{ book.copies_available }}</td>
+                        <td>{{ book.self_location }}</td>
+                    
+                          
+                            <td>
+                                {% if request.user.role == 'librarian'%}
+                                <a  href="{% url 'library_detail' book.pk %}"  class="btn btn-sm btn-primary">
+                                    <i class="bi bi-pen"></i> view
+                                </a>
+                                <a href="{% url 'library_update' book.pk %}" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-pen"></i> Edit
+                                </a>
+                                {% comment %} {% url 'library_update' book.pk %} {% endcomment %}
+                                <a href="" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-pen"></i> Delete
+                                </a>
+                                {% endif %}  
+
+                            </td>
+                          
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if syllabuses.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?course_id={{ selected_course }}&subject_id={{ selected_subject }}&search={{ search_query }}&page={{ syllabuses.previous_page_number }}">Previous</a>
+                    </li>
+                {% endif %}
+                
+                {% for num in syllabuses.paginator.page_range %}
+                    <li class="page-item {% if syllabuses.number == num %}active{% endif %}">
+                        <a class="page-link" href="?course_id={{ selected_course }}&subject_id={{ selected_subject }}&search={{ search_query }}&page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endfor %}
+                
+                {% if syllabuses.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?course_id={{ selected_course }}&subject_id={{ selected_subject }}&search={{ search_query }}&page={{ syllabuses.next_page_number }}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<script>document.addEventListener("DOMContentLoaded", function() {
+    // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+    setTimeout(function() {
+      var messageAlert = document.getElementById("message-alert");
+      if (messageAlert) {
+        messageAlert.style.display = "none"; // Hide the message
+      }
+    }, 3000); // 3000ms = 3 seconds
+  });</script>
+{% endblock javascripts %}
+
+  

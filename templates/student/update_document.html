@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Update Document{% endblock title %}
+
+{% block content %}
+<main class="contents px-5 py-5">
+    <div class="container-fluid">
+        <h3>Update Document</h3>
+
+        <div class="container mt-5">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-4">UPDATE DOCUMENT</h2>
+                </div>
+                <div class="card-body">
+                    <form id="updateForm" method="POST" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="student" class="form-label">Student</label>
+                            <input type="text" class="form-control" value="{{ student.first_name }} {{ student.last_name }}" disabled>
+                        </div>
+
+                        <div class="mb-3">
+                            <h4>Existing Documents</h4>
+                            {% for doc in documents %}
+                                <div class="mb-2">
+                                    <p><strong>Document Name:</strong> {{ doc.document_name }}</p>
+                                    <p><strong>File:</strong> <a href="{{ doc.document.url }}" target="_blank">View Document</a></p>
+                                    
+                                    <!-- Delete Button -->
+                                    <form action="{% url 'delete_document' doc.document_id %}" method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                </div>
+                            {% empty %}
+                                <p>No documents available for this student.</p>
+                            {% endfor %}
+                        </div>
+                        
+                        
+
+                        <!-- Dynamic Document Fields -->
+                        <div id="documentFieldsContainer" class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="document_name" class="form-label">Document Name</label>
+                                <input type="text" class="form-control" name="document_name" placeholder="Enter Document Name" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="document" class="form-label">Upload Document</label>
+                                <input type="file" class="form-control" name="document">
+                            </div>
+                        </div>
+
+                        <!-- Add Document Button -->
+                        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                            <button type="button" id="addDocumentBtn" class="btn btn-secondary">Add Another Document</button>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary">Update Document</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+    document.getElementById('addDocumentBtn').addEventListener('click', function () {
+        var container = document.getElementById('documentFieldsContainer');
+
+        var newRow = document.createElement('div');
+        newRow.className = 'row mb-3';
+
+        // Document Name Column
+        var docNameCol = document.createElement('div');
+        docNameCol.className = 'col-md-4';
+        docNameCol.innerHTML = `
+            <label for="document_name" class="form-label">Document Name</label>
+            <input type="text" class="form-control" name="document_name" placeholder="Enter Document Name" required>
+        `;
+
+        // Document File Upload Column
+        var docFileCol = document.createElement('div');
+        docFileCol.className = 'col-md-4';
+        docFileCol.innerHTML = `
+            <label for="document" class="form-label">Upload Document</label>
+            <input type="file" class="form-control" name="document" required>
+        `;
+
+        newRow.appendChild(docNameCol);
+        newRow.appendChild(docFileCol);
+        container.appendChild(newRow);
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(function() {
+            var messageAlert = document.getElementById("message-alert");
+            if (messageAlert) {
+                messageAlert.style.display = "none";
+            }
+        }, 3000);
+    });
+</script>
+{% endblock javascripts %}

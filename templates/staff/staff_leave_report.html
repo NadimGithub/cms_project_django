@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Staff Leave View{% endblock title %}
+{% block stylesheets %}
+<style>
+    .card-header {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+    
+    .search-container {
+        width: 600px;
+        margin: auto;
+    }
+    
+    .form-control {
+        border-radius: 2.25rem;
+    }
+    
+    .btn {
+        border-radius: 2.25rem;
+        margin-left: 10px;
+    }
+    
+    .button-container {
+        text-align: center; /* Center align buttons */
+        margin-top: 10px; /* Add a small top margin for spacing */
+    }
+    
+    .align-bottom {
+        display: flex;
+        align-items: flex-end; /* Aligns items at the bottom */
+    }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    {% if messages %}
+    <div id="message-alert" class="alert alert-info">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Filter Leave Records</h5>
+        </div>
+        <div class="card-body">
+            <form method="GET" class="row align-items-center justify-content-center">
+                <div class="row w-100 justify-content-center"> <!-- First line of filters -->
+                    <div class="col-md-3 mb-3">
+                        <label for="staffIdFilter" class="form-label">Staff ID</label>
+                        <input type="text" name="staff_id" id="staffIdFilter" class="form-control" placeholder="Enter Staff ID" value="{{ request.GET.staff_id }}">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="startDateFilter" class="form-label">Start Date</label>
+                        <input type="date" name="start_date" id="startDateFilter" class="form-control" value="{{ request.GET.start_date }}">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="endDateFilter" class="form-label">End Date</label>
+                        <input type="date" name="end_date" id="endDateFilter" class="form-control" value="{{ request.GET.end_date }}">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="searchField" class="form-label">Search</label>
+                        <input type="text" name="q" id="searchField" class="form-control" placeholder="Search by name, status, dates, or approved by" value="{{ search_query }}">
+                    </div>
+                </div>
+                <div class="button-container mb-3">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="submit" class="btn btn-secondary ml-2" name="export">Export</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="d-flex align-items-center card-header">
+            <h5 class="mb-0">Staff Information</h5>
+        </div>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead> 
+                    <tr>
+                        <th>Sr NO.</th>
+                        <th>Staff ID</th>
+                        <th>Staff Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Approved By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for leave in leave_list %}
+                    <tr>
+                        <td>{{ leave.id }}</td>
+                        <td>{{ leave.staff_id.id }}</td>
+                        <td>{{ leave.staff_id.name }}</td>
+                        <td>{{ leave.start }}</td>
+                        <td>{{ leave.end }}</td>
+                        <td>{{ leave.reason }}</td>
+                        <td>{{ leave.status }}</td>
+                        <td>{{ leave.approved_by }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ search_query }}&page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?q={{ search_query }}&page={{ num }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ search_query }}&page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(function() {
+            var messageAlert = document.getElementById("message-alert");
+            if (messageAlert) {
+                messageAlert.style.display = "none"; 
+            }
+        }, 2000);
+    });
+</script>
+{% endblock javascripts %}

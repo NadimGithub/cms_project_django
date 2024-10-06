@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create/Edit Scholarship</title>
+</head>
+<body>
+    <h1>{{ form.instance.pk|yesno:"Edit Scholarship,Add New Scholarship" }}</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+    <a href="{% url 'scholarship_list' %}">Back to List</a>
+</body>
+</html>
+ 

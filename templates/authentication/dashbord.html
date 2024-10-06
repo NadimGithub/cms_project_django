@@ -1,0 +1,334 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar With Bootstrap</title>
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    
+        ::after,
+        ::before {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        a {
+            color:whitesmoke ;
+            text-decoration: none;
+        }
+        
+        li {
+            list-style: none;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .wrapper {
+            display: flex;
+        }
+        
+        .main {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            transition: all 0.35s ease-in-out;
+            background-color: #f0e0e0;
+            min-width: 0;
+        }
+        
+        #sidebar {
+            width: 70px;
+            min-width: 70px;
+            z-index: 1000;
+            transition: all .25s ease-in-out;
+            background: linear-gradient(to bottom, 
+              rgb(148, 0, 211), /* Violet */
+              rgb(75, 0, 130), /* Indigo */
+              rgb(0, 0, 255) /* Blue */
+            );
+            display: flex;
+            flex-direction: column;
+          }
+          
+        #sidebar.expand {
+            width: 260px;
+            min-width: 260px;
+        }
+        
+        .toggle-btn {
+            background-color: transparent;
+            cursor: pointer;
+            border: 0;
+            padding: 1rem 1.5rem;
+        }
+        
+        .toggle-btn i {
+            font-size: 1.5rem;
+            color: #000000;
+        }
+        
+        .sidebar-logo {
+            margin: auto 0;
+        }
+        
+        .sidebar-logo a {
+            color: #000000;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+        
+        #sidebar:not(.expand) .sidebar-logo,
+        #sidebar:not(.expand) a.sidebar-link span {
+            display: none;
+        }
+        
+        #sidebar.expand .sidebar-logo,
+        #sidebar.expand a.sidebar-link span {
+            animation: fadeIn .25s ease;
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+        
+            100% {
+                opacity: 1;
+            }
+        }
+        
+        .sidebar-nav {
+            padding: 2rem 0;
+            flex: 1 1 auto;
+        }
+        
+        a.sidebar-link {
+            padding: .625rem 1.625rem;
+            color: #ffffff;
+            display: block;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-link i,
+        .dropdown-item i {
+            font-size: 1.1rem;
+            margin-right: .75rem;
+        }
+        
+        a.sidebar-link:hover {
+            background-color: rgba(0, 0, 0, 0.075);
+        }
+        
+        .sidebar-item {
+            position: relative;
+        }
+        .sidebar-item:hover{
+            border:solid #000000;
+            position: relative;
+        }
+        
+        #sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
+            position: absolute;
+            top: 0;
+            left: 70px;
+            border:solid #000000;
+            background-color: #8264c9;
+            padding: 0;
+            min-width: 15rem;
+            display: none;
+        }
+        
+        #sidebar:not(.expand) .sidebar-item:hover .has-dropdown+.sidebar-dropdown {
+            display: block;
+            max-height: 15em;
+            width: 100%;
+            opacity: 1;
+        }
+        
+        #sidebar.expand .sidebar-link[data-bs-toggle="collapse"]::after {
+            border: solid;
+            border-width: 0 .075rem .075rem 0;
+            content: "";
+            display: inline-block;
+            padding: 2px;
+            position: absolute;
+            right: 1.5rem;
+            top: 1.4rem;
+            transform: rotate(-135deg);
+            transition: all .2s ease-out;
+        }
+        
+        #sidebar.expand .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
+            transform: rotate(45deg);
+            transition: all .2s ease-out;
+        }
+        
+        .navbar {
+            background: linear-gradient(to right, 
+              rgb(148, 0, 211), /* Violet */
+              rgb(75, 0, 130), /* Indigo */
+              rgb(0, 0, 255) /* Blue */
+            );
+        }
+        
+        .navbar-expand .navbar-collapse {
+            min-width: 200px;
+        }
+        
+        .img2{
+            height: 70px;
+            width: 70px;
+        }
+        .img1{
+            height: 40px;
+            width: 40px;
+           border-radius: 30px;
+        }
+        .img1:hover{
+            border:solid #000000;
+        
+        }
+        .toggle:hover{
+            border:solid #000000;
+            position: relative;
+        }
+        
+        .profile-image{
+            position: fixed;
+        }
+        @media (min-width: 768px) {}
+        .dropdown-menu {
+            display: none; /* Hide the dropdown initially */
+            opacity: 0; /* Set initial opacity to 0 */
+            transform: translateY(-10px); /* Move dropdown up */
+            transition: opacity 0.3s ease, transform 0.3s ease; /* Smooth transition for opacity and transform */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow */
+            border-radius: 0.25rem; /* Optional: add border radius for rounded corners */
+        }
+        
+        .dropdown-menu.show {
+            display: block; /* Show the dropdown when active */
+            opacity: 1; /* Fade in */
+            transform: translateY(0); /* Slide down to the original position */
+        }
+        
+        /* Dropdown Item Styles */
+        .dropdown-item {
+            transition: background-color 0.2s ease; /* Smooth transition for background color on hover */
+        }
+        
+        .dropdown-item:hover {
+            background-color: rgba(0, 0, 0, 0.1); /* Light background on hover */
+        }
+    </style>
+        
+</head>
+
+<body>
+    <div class="wrapper">
+        <aside id="sidebar">
+            <div class="toggle d-flex">
+                    <img  src="{% static 'images/dashbordview.png' %}" class="img2  img-fluid" alt="">
+                <div class="sidebar-logo">
+                </div>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+               
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-agenda"></i>
+                        <span>Task</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-agenda"></i>
+                        <span>Task</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-agenda"></i>
+                        <span>Task</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        
+                        <i class="lni lni-agenda"></i>
+                        <span>Task</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-agenda"></i>
+                        <span>Task</span>
+                    </a>
+                </li>
+        </aside>
+        <div class="main">
+            <nav class="navbar navbar-expand px-4 py-3">
+                <span class="d-none d-sm-inline"><h1>Virat it services</h1></span>
+                <form action="#" class="d-none d-sm-inline-block">
+
+                </form>
+                
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-link d-flex align-items-center">
+                                <img src="{{ profile_image }}" class="img1 avatar img-fluid rounded-circle me-2" alt="Profile Picture">
+                                <span class="d-none d-sm-inline">{{ first_name }}</span> <!-- Display the first_name here -->
+
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end rounded">
+                                <a class="dropdown-item" href="{% url 'profile_page' %}">Profile</a>
+                                <a class="dropdown-item" href="#">Settings</a>
+                                <a class="dropdown-item" href=" {% url 'login' %}">Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script> let sideexpand= false;
+
+    sidebar.addEventListener("click", function () {
+      sideexpand = !sideexpand; 
+      
+      if (sideexpand) {
+        sidebar.classList.add("expand");
+      } else {
+        sidebar.classList.remove("expand");
+      }
+    });
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+
+{% extends "base.html" %}
+{%block title%}Add Course{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+        <main class="contents px-5 py-5">
+            {% if messages %}
+            <div id="message-alert" class="alert alert-info">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+          {% endif %}
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3>this is main content course</h3>
+                    </div> 
+                            <div class="container mt-5">
+                                <form  method="POST" action="{% url 'course_create' %}" enctype="multipart/form-data" >
+                                {% csrf_token %}
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="name" class="form-label">Name</label>
+                                            <input type="text" class="form-control" id="name" name="name" required pattern="^[a-zA-Z\s]+$">
+                                            
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="institute_id" class="form-label">Institute</label>
+                                            <input type="text" class="form-control" id="institute_id" name="institute_id" value="{{ inst_id }}" disabled>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="start_date" class="form-label">Start Date</label>
+                                            <input type="date" class="form-control" id="start_date" name="start_date" required>
+                                        </div>
+                                    </div>
+                        
+                                    <!-- Second Row -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="durstion" class="form-label">Duration (Month)</label>
+                                            <select class="form-select" id="durstion" name="durstion" required>
+                                                <option value="" disabled selected>Select duration</option>
+                                                <option value="1">1 Month</option>
+                                                <option value="3">3 Months</option>
+                                                <option value="6">6 Months</option>
+                                                <option value="12">12 Months</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="intake_capacity" class="form-label">Intake Capacity</label>
+                                            <input type="number" class="form-control" id="intake_capacity" name="intake_capacity" min="1" required>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="reset" class="btn btn-secondary">Clear Form</button>
+                                </form>
+                            </div>
+             
+          
+                            {% endblock content %} 
+                            {% block javascripts %}
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+                                    setTimeout(function() {
+                                      var messageAlert = document.getElementById("message-alert");
+                                      if (messageAlert) {
+                                        messageAlert.style.display = "none"; // Hide the message
+                                      }
+                                    }, 2000); // 3000ms = 3 seconds
+                                  });
+                                </script>
+                            {% endblock javascripts %}        

@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block title %}View Staff{% endblock title %}
+{% block stylesheets %}
+<style>
+  .card-header {
+      display: flex;
+      align-items: center;
+      position: relative; /* Keeps the header aligned */
+  }
+  
+.search-container {
+  position: absolute; /* Allows absolute positioning */
+  left: 50%;
+  transform: translateX(-50%); /* Centers the search field */
+  width: 600px; /* Fixed width for the search bar */
+  color: #f8f9fa; /* Light background color (you can change this) */
+  padding: 10px; /* Optional: adds padding around the search input */
+  border-radius: 2.25rem; /* Optional: adds border radius to the container */
+}
+  
+  .form-control {
+      border-radius: 2.25rem; /* Adjust as needed */
+  }
+  
+  .btn {
+      border-radius: 2.25rem; /* Add border radius to the button */
+      margin-left: 10px; /* Space between input and button */
+  }
+  
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-5">
+  {% if messages %}
+  <div id="message-alert" class="alert alert-info">
+      {% for message in messages %}
+          {{ message }}
+      {% endfor %}
+  </div>
+{% endif %}
+<div class="card mb-4">
+  <h5 class="card-header">Filter Leave Records</h5>
+  <div class="card-body">
+      <form method="GET" class="row align-items-center justify-content-center">
+          <div class="row w-100 justify-content-center"> <!-- Added a full-width row for the second line of fields -->
+              <div class="col-md-3 mb-3">
+                  <label for="staffIdFilter" class="form-label">Staff ID</label>
+                  <input type="text" name="staff_id" id="staffIdFilter" class="form-control" placeholder="Enter Staff ID" value="{{ request.GET.staff_id }}">
+              </div>
+              <div class="col-md-3 mb-3">
+                  <label for="startDateFilter" class="form-label">Start Date</label>
+                  <input type="date" name="start_date" id="startDateFilter" class="form-control" value="{{ request.GET.start_date }}">
+              </div>
+              <div class="col-md-3 mb-3">
+                  <label for="endDateFilter" class="form-label">End Date</label>
+                  <input type="date" name="end_date" id="endDateFilter" class="form-control" value="{{ request.GET.end_date }}">
+              </div>
+              <div class="col-md-3 mb-3 d-flex align-items-end">
+                  <button type="submit" class="btn btn-primary">Search</button>
+              </div>
+          </div>
+      </form>
+  </div>
+</div>  
+
+<div class="card">
+  <div class="d-flex align-items-center card-header">
+      <h5 class="mb-0">Staff Information</h5>
+      <div class="search-container">
+          <form method="GET" class="d-inline-flex justify-content-center">
+              <input type="text" name="q" class="form-control" placeholder="Search by name, status, dates, or approved by" value="{{ search_query }}" style="width: 600px; border-radius: 2.25rem;">
+              <button type="submit" class="btn btn-primary" style="border-radius: 2.25rem;">
+                  <i class="fas fa-search"></i>
+              </button>
+          </form>
+      </div>
+  </div>
+  
+    <div class="table-responsive text-nowrap">
+      <table class="table">
+        <thead>
+          <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Institute</th>
+              <th>Date of Join</th>
+              <th>Status</th>
+              <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for staff in staff_list %}
+          <tr>
+              <td><a href="{% url 'staff_detail' staff.pk %}">{{ staff.name }}</a></td>
+              <td>{{ staff.email }}</td>
+              <td>{{ staff.role }}</td>
+              <td>{{ staff.institute.name }}</td>
+              <td>{{ staff.do_join}}</td>
+              
+              <td><span class="badge bg-success">{{ staff.status }}</span></td>
+              <td>
+                <a href="{% url 'toggle_staff_status' staff.pk %}" class="btn btn-sm btn-warning">
+                  {% if staff.status == 'active' %}
+                      <i class="bi bi-eye-slash"></i> Deactivate
+                  {% else %}
+                      <i class="bi bi-eye"></i> Activate
+                  {% endif %}
+                </a>
+              </td>
+          </tr>
+          {% empty %}
+          <tr>
+              <td colspan="6">No staff members available.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Pagination Controls -->
+    <div class="pagination justify-content-center mt-4">
+      <ul class="pagination">
+        {% if staff_list.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?search={{ search_query }}&page=1" aria-label="First">
+              <span aria-hidden="true">&laquo;&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?search={{ search_query }}&page={{ staff_list.previous_page_number }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        {% endif %}
+        
+        {% for num in staff_list.paginator.page_range %}
+          {% if staff_list.number == num %}
+            <li class="page-item active"><a class="page-link">{{ num }}</a></li>
+          {% elif num > staff_list.number|add:'-3' and num < staff_list.number|add:'3' %}
+            <li class="page-item"><a class="page-link" href="?search={{ search_query }}&page={{ num }}">{{ num }}</a></li>
+          {% endif %}
+        {% endfor %}
+        
+        {% if staff_list.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?search={{ search_query }}&page={{ staff_list.next_page_number }}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?search={{ search_query }}&page={{ staff_list.paginator.num_pages }}" aria-label="Last">
+              <span aria-hidden="true">&raquo;&raquo;</span>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+  // Wait for the DOM to be fully loaded
+  document.addEventListener("DOMContentLoaded", function() {
+    // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+    setTimeout(function() {
+      var messageAlert = document.getElementById("message-alert");
+      if (messageAlert) {
+        messageAlert.style.display = "none"; // Hide the message
+      }
+    }, 2000); // 3000ms = 3 seconds
+  });
+</script>
+
+{% endblock javascripts %}

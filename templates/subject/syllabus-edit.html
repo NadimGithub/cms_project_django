@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Edit Syllabus{% endblock title %}
+{% block stylesheets %} 
+{% endblock stylesheets %}
+
+{% block content %}
+<main class="contents px-5 py-5">
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3>Edit Syllabus Details</h3>
+        </div> 
+                   
+        <!----- Edit Form ------>
+        <div class="container mt-5">
+            <form id="myForm" action="{% url 'syllabus_update' syllabus.pk %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- First Row -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="course_id" class="form-label">Course ID</label>
+                        <select class="form-select" id="course_id" name="course_id" onchange="fetch_subjects(this.value)" required>
+                            <option value="" disabled selected>Select Course</option>
+                            {% for course in courses %}
+                            <option value="{{ course.id }}" {% if course.id == form.course_id.value %}selected{% endif %}>
+                                {{ course.name }}
+                            </option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="subject_id" class="form-label">Subject</label>
+                        <select class="form-select" id="subject_id" name="subject_id" required>
+                            <option value="" disabled selected>Select Subject</option>
+                            {% for subject in subjects %}
+                            <option value="{{ subject.id }}" {% if subject.id == form.subject_id.value %}selected{% endif %}>
+                            {{ subject.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="unit" class="form-label">Unit</label>
+                        <input type="text" class="form-control" id="unit" name="unit" value="{{ syllabus.unit }}" required>
+                    </div>
+                </div>
+                
+                <!-- Second Row -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="points_sub_points" class="form-label">Points/Sub Points</label>
+                        <input type="text" class="form-control" id="points_sub_points" name="points_sub_points" value="{{ syllabus.points_sub_points }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="duration" class="form-label">Duration (in hours)</label>
+                        <input type="number" class="form-control" id="duration" name="duration" min="1" value="{{ syllabus.duration }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="marks" class="form-label">Marks</label>
+                        <input type="number" class="form-control" id="marks" name="marks" min="0" value="{{ syllabus.marks }}" required>
+                    </div>
+                </div>
+                
+                <!-- Submit and Reset Buttons -->
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="reset" class="btn btn-secondary">Clear Form</button>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+    
+{% block javascripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    function fetch_subjects(courseId) {
+        if (courseId){
+            $.ajax({
+                url: "{% url 'fetch_subjects' %}",
+                type: "GET",
+                data:{
+                    'course_id': courseId
+                },
+                success: function(data){
+                    $('#subject_id').html(data);
+                },
+                error: function(xhr, status, error){
+                    console.error("Error fetching subjects:", error);
+                }
+            });
+        }
+    }
+</script>
+{% endblock javascripts %}

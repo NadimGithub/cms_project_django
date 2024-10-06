@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Subject Table{% endblock title %}
+
+{% block content %}
+{% if messages %}
+<div id="message-alert" class="alert alert-info">
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+</div>
+{% endif %}
+<div class="container-fluid py-5">
+    <div class="card mb-4">
+        <h5 class="card-header">Search Subject Records</h5>
+        <div class="card-body">
+            <form method="GET" class="row align-items-center">
+                <!-- Course Filter Dropdown on the Left -->
+                <div class="col-md-4 mb-3">
+                    <label for="courseFilter" class="form-label">Select Course</label>
+                    <select name="course_id" id="courseFilter" class="form-control">
+                        <option value="">-- All Courses --</option>
+                        {% for course in courses %}
+                            <option value="{{ course.id }}" {% if course.id == selected_course %}selected{% endif %}>{{ course.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="yearFilter" class="form-label">Select Year</label>
+                    <select name="year" id="yearFilter" class="form-control">
+                        <option value="">-- All Years --</option>
+                        {% for year in years %}
+                            <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="search" class="form-label">Search</label>
+                    <input type="text" name="search" id="search" class="form-control" placeholder="Search by name, type, etc." value="{{ search_query }}">
+                </div>
+
+                <!-- Filter Button on the Right (perfectly aligned) -->
+                <div class="col-md-2 mb-3">
+                  <div class="w-100 mt-4">
+                    <button type="submit" class="btn btn-primary ">Search</button>
+                  </div>
+                  </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <h5 class="card-header">Subject Table</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Course</th>
+                        <th>Year</th>
+                        <th>Marks/Credits</th>
+                        <th>Duration</th>
+                        <th>Submitted By</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subject in subjects %}
+                        <tr>
+                            <td>{{ subject.id }}</td>
+                            <td>{{ subject.name }}</td>
+                            <td>{{ subject.type }}</td>
+                            <td>{{ subject.course_id.name }}</td>
+                            <td>{{ subject.year }}</td>
+                            <td>{{ subject.marks_credits }}</td>
+                            <td>{{ subject.duration }}</td>
+                            <td>{{ subject.submitted_by.username }}</td>
+                            <td>
+                                <a href="{% url 'subject_update' pk=subject.pk %}" class="btn btn-sm btn-primary">Edit</a>
+                                <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if subjects.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?course_id={{ selected_course }}&search={{ search_query }}&page={{ subjects.previous_page_number }}">Previous</a>
+                    </li>
+                {% endif %}
+                
+                {% for num in subjects.paginator.page_range %}
+                    <li class="page-item {% if subjects.number == num %}active{% endif %}">
+                        <a class="page-link" href="?course_id={{ selected_course }}&search={{ search_query }}&page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endfor %}
+                
+                {% if subjects.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?course_id={{ selected_course }}&search={{ search_query }}&page={{ subjects.next_page_number }}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock content %}
+
+
+
+{% block javascripts %}
+<script>
+  // Wait for the DOM to be fully loaded
+  document.addEventListener("DOMContentLoaded", function() {
+    // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+    setTimeout(function() {
+      var messageAlert = document.getElementById("message-alert");
+      if (messageAlert) {
+        messageAlert.style.display = "none"; // Hide the message
+      }
+    }, 2000); // 3000ms = 3 seconds
+  });
+  </script>
+{% endblock javascripts %}

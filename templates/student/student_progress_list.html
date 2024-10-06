@@ -1,0 +1,35 @@
+
+{% block content %}
+<h2>Progress List</h2>
+<a href="{% url 'student_progress_create' %}">Add New Progress</a>
+<table>
+    <thead>
+        <tr>
+            <th>Student</th>
+            <th>Course ID</th>
+            <th>Marks</th>
+            <th>Grade</th>
+            <th>Attendance</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for progress in progress %}
+        <tr>
+            <td>{{ progress.student }}</td>
+            <td>{{ progress.course_id }}</td>
+            <td>{{ progress.marks }}</td>
+            <td>{{ progress.grade }}</td>
+            <td>{{ progress.attendance }}</td>
+            <td>
+                <a href="{% url 'student_progress_update' progress.pk %}">Edit</a>
+                <form action="{% url 'student_progress_delete' progress.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

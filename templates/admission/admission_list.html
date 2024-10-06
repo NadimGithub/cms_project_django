@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Staff View{% endblock title %}
+{% block stylesheets %}
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="card">
+        <h5 class="card-header">Exam details</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead> 
+                    <tr>
+                        <th> id</th>
+                        <th>student Name</th>
+                        <th>Course</th>
+                        <th>Date_of_Apply</th> 
+                        <th>Admission By</th>
+                        <th>Fees Structure</th>
+                        <th>Fees paid</th>
+                        <th>Fees Unpaid</th>
+                        <th>Status</th>
+                                  
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for admission in admissions %}
+                    <tr>
+                        <td>{{ admission.id}}</td>
+                        <td>{{ admission.student_id.id}}-{{ admission.student_id.first_name}} {{ admission.student_id.middle_name}} {{ admission.student_id.last_name}}</td>
+                        <td>{{ admission.course_id}}</td>
+                        <td>{{ admission.date_of_apply }}</td>
+                        <td>{{ admission.admission_by }}</td>
+                        <td>{{ admission.fees_structure.name }}</td>
+                        <td>{{ admission.fees_paid }}</td>
+                        <td>{{ admission.fees_unpaid }}</td>
+                        <td>{{ admission.status}}</td>
+                        
+                            <td>
+                                <a  href="#"  class="btn btn-sm btn-primary">
+                                    <i class="bi bi-pen"></i> view
+                                </a>
+                                <a href="{% url 'admission_update' admission.pk %}" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-pen"></i> Edit
+                                </a>
+                            </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock javascripts %}
+
+  
+    

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Edit Document{% endblock title %}
+
+{% block content %}
+<main class="contents px-5 py-5">
+    <div class="container-fluid">
+        <h3>Edit Document</h3>
+
+        <div class="container mt-5">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-4">Edit {{ document.document_name }}</h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Update Document</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}

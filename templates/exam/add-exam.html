@@ -1,0 +1,197 @@
+               
+{% extends "base.html" %}
+{%block title%}Add Exam{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+
+            <main class="contents px-5 py-5">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3>exam</h3>
+                    </div> 
+                   
+                                     <!-----Add form ------>
+                                     <div class="container mt-5">
+                                        <h2 class="mb-4">Exam Form</h2>
+                                        <form action="{% url "exam_create" %}" method="POST">
+                                            {% csrf_token %}
+                                            <!-- Row 1 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="examId" class="form-label">ID</label>
+                                                    <input type="text" class="form-control" disabled placeholder="Enter ID" required> 
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="name" class="form-label">Exam Name</label>
+                                                    <input type="text" class="form-control" d="name" name="name" placeholder="name" required> 
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="courseId" class="form-label">Course</label>
+                                                    {% comment %} <input type="text" class="form-control" id="course_id" name="course_id" placeholder="Enter Course ID" required> {% endcomment %}
+                                                    <select class="form-select" id="course_id" name="course_id" required>
+                                                        <option value="" disabled selected>Select Course</option>
+                                                        {% for course in courses %}
+                                                        <option value="{{course.id}}">{{course.name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="year" class="form-label">Year</label>
+                                                    <select class="form-select" id="year" name="year" onchange="fetchSemester(this.value)" required>
+                                                        <option value="" selected>Select Year</option>
+                                                    </select>
+                                                </div>
+                    
+                                                <div class="col-md-4">
+                                                    <label for="semester" class="form-label">Semester</label>
+                                                    <select class="form-select" id="semester" name="semester" onchange="fetchDivision(this.value)" required>
+                                                        <option value="" selected>Select Semester</option>
+                                                    </select>
+                                                </div>
+                    
+                                                <div class="col-md-4">
+                                                    <label for="division" class="form-label">Division</label>
+                                                    <select class="form-select" id="division" name="division" onchange="fetchStudents()" required>
+                                                        <option value="" selected>Select Division</option>
+                                                    </select>
+                                                </div>
+                    
+                                                <div class="col-md-4">
+                                                    <label for="sub_id" class="form-label">Subject </label>
+                                                    {% comment %} <input type="text" class="form-control" id="sub_id" name="sub_id" placeholder="Enter Subject ID" required> {% endcomment %}
+                                                    <select class="form-select" id="sub_id" name="sub_id" required>
+                                                        <option value="" disabled selected>Select Subject</option>
+                                                        {% for subject in subjects  %}
+                                                        <option value="{{subject.id}}">{{subject.name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Row 2 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="date" class="form-label">Date</label>
+                                                    <input type="date" class="form-control" id="date" name="date" required>
+                                                   
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="time" class="form-label">Time</label>
+                                                    <input type="time" class="form-control" id="time" name="time" required>
+                                                   
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="location" class="form-label">Location</label>
+                                                    <input type="text" class="form-control" id="location" name="location" placeholder="Enter Location" required>
+                                                   
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Row 3 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="duration" class="form-label">Duration</label>
+                                                    <input type="text" class="form-control" id="duration" name="duration" placeholder="Enter Duration" required>
+                                                    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="type" class="form-label">Type</label>
+                                                    <select class="form-select" id="type" name="type" required>
+                                                        <option value="" disabled selected>Select Type</option>
+                                                        <option value="theory">Theory</option>
+                                                        <option value="practical">Practical</option>
+                                                        <option value="viva">Viva</option>
+                                                    </select>
+                                                    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="status" class="form-label">Status</label>
+                                                    <select class="form-select" id="status" name="status" required>
+                                                        <option value="" disabled selected>Select Status</option>
+                                                        <option value="scheduled">Scheduled</option>
+                                                        <option value="completed">Completed</option>
+                                                        <option value="canceled">Canceled</option>
+                                                    </select>
+                                                   
+                                                </div>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+                                         
+                                    {% endblock content %} 
+  
+                                    {% block javascripts %}
+                                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    function fetchYear(courseId) {
+        if (courseId) {
+            $.ajax({
+                url: "{% url 'fetch_years' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId
+                },
+                success: function(data) {
+                    $('#year').html(data);  // Populate the year select element
+                }
+            });
+        }
+    }
+
+    function fetchSemester(year) {
+        var courseId = $('#course').val();
+        if (courseId && year) {
+            $.ajax({
+                url: "{% url 'fetch_semesters' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year
+                },
+                success: function(data) {
+                    $('#semester').html(data);  // Populate the semester select element
+                }
+            });
+        }
+    }
+
+    function fetchDivision(semester) {
+        var courseId = $('#course').val();
+        var year = $('#year').val();
+        if (courseId && year && semester) {
+            $.ajax({
+                url: "{% url 'fetch_divisions' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year,
+                    'semester': semester
+                },
+                success: function(data) {
+                    console.log(data); // Log the response to check
+                    $('#division').html(data);  // Populate the division select element
+                },
+                error: function(xhr, status, error) {
+                    console.error(error); // Log any errors
+                }
+            });
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+        setTimeout(function() {
+            var messageAlert = document.getElementById("message-alert");
+            if (messageAlert) {
+                messageAlert.style.display = "none"; // Hide the message
+            }
+        }, 3000); // 3000ms = 3 seconds
+    });
+</script>
+                                    {% endblock javascripts %}    

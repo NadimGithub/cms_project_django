@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Staff View{% endblock title %}
+{% block stylesheets %}
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="card">
+        <h5 class="card-header">Exam details</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead> 
+                    <tr>
+                        <th>Exam id</th>
+                        <th>Subject name</th>
+                        <th>date</th>
+                        <th>time</th>
+                        <th>location</th>
+                        <th>duration</th>
+                        <th>type</th>              
+                        <th>status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for exam in exams%}
+                    <tr>
+                        <td><a href="{% url 'exam_update' exam.pk%}">{{ exam.id}}</td>
+                        <td>{{ exam.sub_id.name}}</a></td>
+                        <td>{{ exam.date}}</td>
+                        <td>{{ exam.time}}</td>
+                        <td>{{ exam.location }}</td>
+                        <td>{{ exam.duration }}</td>
+                        <td>{{ exam.type }}</td>
+                        <td>{{ exam.status }}</td>
+                    
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock javascripts %}

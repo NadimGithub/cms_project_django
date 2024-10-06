@@ -1,0 +1,101 @@
+
+{% extends "base.html" %}
+{%block title%}Add Admission{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %}
+          <main class="contents px-5 py-5">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3>this is main content Admission</h3>
+                    </div> 
+                   
+                                     <!-----Add form ------>
+                                     <div class="container mt-5">
+                                        <h2 class="mb-4">Admission Form</h2>
+                                        <form  method="POST"  enctype="multipart/form-data" >
+                                            {% csrf_token %}
+                                            <div class="row mb-3">
+                                                {% comment %} <div class="col-md-4">
+                                                    <label for="admissionId" class="form-label">Admission ID</label>
+                                                    <input type="text" class="form-control" id="admission_id" name= "admission_id"  placeholder="Enter Admission ID" required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter a valid Admission ID.
+                                                    </div>
+                                                </div> {% endcomment %}
+                                                <div class="col-md-4">
+                                                    <label for="studentId" class="form-label">Student ID</label>
+                                                        <select class="form-select" id="student_id" name="student_id" required>
+                                                            <option value="" disabled selected>Select Student</option>
+                                                        {% for  student in students %}
+                                                        <option value="{{student.id}}">{{student.id}}-{{student.first_name}} {{student.middle_name}} {{student.last_name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="courseId" class="form-label">Course ID</label>
+                                                   
+                                                    <select class="form-select" id="course_id" name="course_id" required>
+                                                        <option value="" disabled selected>Select Course</option>
+                                                        {% for  course in courses %}
+                                                        <option value="{{course.id}}">{{course.id}}-{{course.name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                
+                                            <!-- Row 2 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="status" class="form-label">Status</label>
+                                                    <select class="form-select" id="status" name="status" required>
+                                                        <option value="" disabled selected>Select Status</option>
+                                                        <option value="pending">Pending</option>
+                                                        <option value="approved">Approved</option>
+                                                        <option value="rejected">Rejected</option>
+                                                    </select>
+                                                    
+                                                </div>
+                                            </div>
+                                
+                                            <!-- Row 3 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="fees_structure" class="form-label">Fees Structure</label>
+                                                    <select class="form-select" id="fees_structure" name="fees_structure" required>
+                                                        <option value="" disabled selected>Select Fees Structure</option>
+                                                        {% for  feesstructure in fesses %}
+                                                        <option value="{{feesstructure.id}}">{{feesstructure.id}}-{{feesstructure.name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="feesPaid" class="form-label">Fees Paid</label>
+                                                    <input type="text" class="form-control" id="fees_paid" name="fees_paid" placeholder="Enter Fees Paid" required>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="fees_unpaid" class="form-label">Fees Unpaid</label>
+                                                    <input type="text" class="form-control" id="fees_unpaid" name="fees_unpaid" placeholder="Enter Fees Paid" required>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="dateOfApply" class="form-label">Date of Apply</label>
+                                                    <input type="date" class="form-control" id="date_of_apply"  name="date_of_apply" required>
+                                                    
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+                                
+                </div>
+            </main>
+                  
+            {% endblock content %} 
+  
+            {% block javascripts %}
+            
+            {% endblock javascripts %}  

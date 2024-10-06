@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff List</title>
+</head>
+<body>
+    <h1>Staff List</h1>
+    <a href="{% url 'staff_create' %}">Add New Staff</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Institute</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for staff in staff_list %}
+                <tr>
+                    <td><a href="{% url 'staff_detail' staff.pk %}">{{ staff.name }}</a></td>
+                    <td>{{ staff.email }}</td>
+                    <td>{{ staff.role }}</td>
+                    <td>{{ staff.institute }}</td>
+                    <td>{{ staff.status }}</td>
+                    <td>
+                        <form action="{% url 'staff_delete' staff.pk %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this staff member?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">No staff members available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

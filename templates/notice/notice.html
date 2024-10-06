@@ -1,0 +1,71 @@
+               
+{% extends "base.html" %}
+{%block title%}Add Institute{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+            <main class="contents px-5 py-5">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3>this is main content attendence</h3>
+                    </div> 
+                   
+                                     <div class="container mt-5">
+                                        <h2 class="mb-4">Notice Form</h2>
+                                        <form id="myForm" method="POST" novalidate>
+                                            {% csrf_token %}
+
+                                            <div class="row mb-3">
+                                                <div class="col-md-12">
+                                                    <label class="form-label">Notice Details</label>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="title" class="form-label">Title</label>
+                                                    <input type="text" class="form-control" id="title" name="title" placeholder="Enter Title" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <div class="col-md-12">
+                                                    <label for="content" class="form-label">Content</label>
+                                                    <textarea class="form-control" id="content" name="content" rows="4" placeholder="Enter Content" required></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="date_of_publish" class="form-label">Date of Publish</label>
+                                                    <input type="date" class="form-control" id="date_of_publish" name="date_of_publish" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="date_of_end" class="form-label">Date of End</label>
+                                                    <input type="date" class="form-control" id="date_of_end" name="date_of_end" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="notice_type" class="form-label">Notice Type</label>
+                                                    <select class="form-select" id="notice_type" name="notice_type" required>
+                                                        <option value="" disabled selected>Select Notice Type</option>
+                                                        <option value="announcement">Announcement</option>
+                                                        <option value="event">Event</option>
+                                                        <option value="reminder">Reminder</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+                                
+                                    {% endblock content %} 
+  
+                                    {% block javascripts %}
+                                    
+                                    {% endblock javascripts %}                               
+               

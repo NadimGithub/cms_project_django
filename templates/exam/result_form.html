@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{%block title%}Add Institute{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+            <main class="contents px-5 py-5">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3>Result</h3>
+                    </div> 
+                   
+                                     <!-----Add form ------>
+                                     <div class="container mt-5">
+                                        <h2 class="mb-4">Student Result</h2>
+                                        <form id="myForm" method="POST" novalidate>
+                                            {% csrf_token %}
+                                            <!-- Row 1 -->
+                                            <div class="col-md-4">
+                                                <label for="std_id" class="form-label">Student Name</label>
+                                                <select class="form-select" id="std_id" name="std_id" required>
+                                                    <option value="" disabled selected>Select Student Name</option>
+                                                    {% for student in students %}
+                                                        <option value="{{ student.id }}">{{ student.id }}-{{ student.first_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="subject_id" class="form-label">subject Name</label>
+                                                <select class="form-select" id="subject_id" name="subject_id" required>
+                                                    <option value="" disabled selected>Select Student Name</option>
+                                                    {% for subject in subjects %}
+                                                        <option value="{{ subject.id }}">{{ subject.id }}-{{ subject.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <!-- Row 2 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="exam" class="form-label">Exam ID</label>
+                                                    <select class="form-select" id="exam" name="exam" required>
+                                                        <option value="" disabled selected>Select exam id</option>
+                                                        {% for exam in exams %}
+                                                            <option value="{{ exam.id }}">{{ exam.id }} - {{ exam.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="marks" class="form-label">Marks</label>
+                                                    <input type="number" class="form-control" id="marks" name="marks" placeholder="Enter Marks" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="grade" class="form-label">Grade</label>
+                                                    <select class="form-select" id="grade" name="grade" required>
+                                                        <option value="" disabled selected>Select Grade</option>
+                                                        <option value="A">A</option>
+                                                        <option value="B">B</option>
+                                                        <option value="C">C</option>
+                                                        <option value="D">D</option>
+                                                        <option value="F">F</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+                                    {% endblock content %} 
+  
+                                    {% block javascripts %}
+                                    
+                                    {% endblock javascripts %}    

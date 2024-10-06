@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{%block title%}Add Institute{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+
+            <main class="contents px-5 py-5">
+                {% if messages %}
+                <div id="message-alert" class="alert alert-info">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3>this is main content attendence</h3>
+                    </div> 
+                   
+                                     <!-----Add form ------>
+                                     <div class="container mt-5">
+                                        <h2 class="mb-4">Library Form</h2>
+                                        <form method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <!-- Row 1 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="book_name" class="form-label">Book Name</label>
+                                                    <input type="text" class="form-control" id="book_name" name="book_name" placeholder="Enter Book ID" required>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="course_id" class="form-label">Course Name</label>
+                                                    <select class="form-select"id="course_id" name="course_id" required>
+                                                        <option disabled selected>Select Course</option>
+                                                        {% for courses in course %}
+                                                        <option value="{{courses.id}}">{{courses.name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="author" class="form-label">Author</label>
+                                                    <input type="text" class="form-control" id="author" name="author" placeholder="Enter Author Name" required>
+                                                 
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="category" class="form-label">catagory</label>
+                                                    <select class="form-select" id="category" name="category" required>
+                                                        <option value="" disabled selected>Select catagory</option>
+                                                        <option value="text">Text</option>
+                                                        <option value="reference">Refrance</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                
+                                            <!-- Row 2 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="publish_date" class="form-label">Publish Date</label>
+                                                    <input type="date" class="form-control" id="publish_date" name="publish_date" required>
+                                                  
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="copies_available" class="form-label">Copies Available</label>
+                                                    <input type="number" class="form-control" id="copies_available" name="copies_available" placeholder="Enter Number of Copies" required>
+                                                   
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="isbn" class="form-label">ISBN (Code)</label>
+                                                    <input type="text" class="form-control" id="isbn" name="isbn" placeholder="Enter ISBN Code" required>
+                                                    
+                                                </div>
+                                            </div>
+                                
+                                            <!-- Row 3 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="language" class="form-label">Language</label>
+                                                    <select class="form-select" id="language" name="language" required>
+                                                        <option value="" disabled selected>Select Language</option>
+                                                        <option value="english">English</option>
+                                                        <option value="spanish">Spanish</option>
+                                                        <option value="french">French</option>
+                                                        <option value="german">German</option>
+                                                    </select>
+                                                    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="condition" class="form-label">Condition</label>
+                                                    <select class="form-select" id="condition" name="condition" required>
+                                                        <option value="" disabled selected>Select Condition</option>
+                                                        <option value="new">New</option>
+                                                        <option value="used">Used</option>
+                                                        <option value="damaged">Damaged</option>
+                                                    </select>
+                                                    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="self_location" class="form-label">Shelf Location</label>
+                                                    <input type="text" class="form-control" id="self_location" name="self_location" placeholder="Enter Shelf Location" required>
+                                                    
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="book_images" class="form-label">Profile Image</label>
+                                                    <input type="file" class="form-control" id="book_images" name="book_images" placeholder="Enter Last Name" required> 
+                                                </div>
+                                            </div>
+                                
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+   
+                                    {% endblock content %} 
+  
+                                    {% block javascripts %}
+                                    <script>document.addEventListener("DOMContentLoaded", function() {
+    // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+    setTimeout(function() {
+      var messageAlert = document.getElementById("message-alert");
+      if (messageAlert) {
+        messageAlert.style.display = "none"; // Hide the message
+      }
+    }, 3000); // 3000ms = 3 seconds
+  });</script>
+                                    {% endblock javascripts %}    

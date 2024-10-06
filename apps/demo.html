@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Paper Layout</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Basic styles for the question paper layout */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+/* Container for the question paper */
+.question-paper {
+    background-color: white;
+    width: 100%;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header section */
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+header p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+/* Instructions section */
+.instructionss {
+    margin-bottom: 20px;
+}
+
+.instructionss h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.instructionss p {
+    margin: 5px 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Questions section */
+.questions {
+    margin-bottom: 20px;
+}
+
+.question {
+    margin-bottom: 20px;
+}
+
+.question h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.question p {
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Footer section */
+footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+/* Applying specific left and right margins */
+@media print {
+    body {
+        background-color: white;
+    }
+
+    .question-paper {
+        width: auto;
+        max-width: none;
+        margin: 20mm;
+        border: none;
+        box-shadow: none;
+    }
+}
+
+
+.code-box {
+    
+    padding: 15px;
+    display: inline-block;
+    text-align: end;
+  
+    margin-left: 30px;  /* Optional: Adds space to the left of the box */
+    position: relative;  /* Allows you to adjust the box's position */
+    top: -110px;  /* Moves the box 20px upwards */
+    margin-right: 20px;
+}
+
+
+hr {
+    padding-top: 0%;
+    border: none; /* Remove the default border */
+    height: 1px;  /* Set the height of the hr */
+    background-color: black; /* Set the color */
+    margin: -5px 0; /* Add some space above and below */
+    width: 760px;
+}
+
+
+
+.time {
+
+    padding: 10px;
+    display: inline-block;
+    text-align: end;
+  
+  /* Optional: Adds space to the left of the box */
+    position: relative;  /* Allows you to adjust the box's position */
+    top: -55px;  /* Moves the box 20px upwards */
+    margin-right: -100px;
+}
+
+
+.instructions {
+    padding: 13px;
+    margin-bottom: 20px;
+}
+
+
+
+.instructions p {
+    margin: 10px 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+.marks{
+    padding: 10px;
+    display: inline-block;
+    text-align: end;
+  
+  /* Optional: Adds space to the left of the box */
+    position: relative;  /* Allows you to adjust the box's position */
+    top: -20px;  /* Moves the box 20px upwards */
+    margin-right: -1px;
+}
+    </style>
+</head>
+<body>
+        <div class="question-paper">
+            <header>
+            
+                <p>Sample Question Paper</p>
+            </header>
+            <section class="instructions">
+                <p><strong>Subject Name :</strong>{{exam_paper.subject.name }}</p>
+            
+                <p><strong>Semester :</strong> {{exam_paper.course.semester }}</p>
+                <p><strong>Date :</strong> {{exam_paper.date }}</p>
+                <p><strong>Max. Marks :</strong> {{exam_paper.total_marks }}</p>
+            
+                <div class="code-box" style="float: right;">            
+                    <p>{{ exam_paper.exam_id.code }}</p>
+                
+                </div>
+                <div class="time" style="float: right;">
+                <p><strong>Time :</strong> {{exam_paper.time}}</p>
+            </div>
+    <hr>
+            <div class="instructionss">
+                <h3>Instructions:</h3>
+                <ul>
+                    {% for instruction in exam_paper.instructions.splitlines %}
+                    <li>{{ instruction }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+    
+
+
+            <section class="questions">
+                <div class="questions"> 
+                    <h4> Q. {{ exam_paper.questionno}}<strong> {{ exam_paper.questiontext }</strong><span class="marks" style="float: right;"><h4>({{ exam_paper.questionmarks }} Marks)</h4></span></h4>
+                    <ol type="a">
+
+                    
+                    </ol>
+        
+                </section>
+            </div>
+                </div>
+            </div>
+
+       
+      
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

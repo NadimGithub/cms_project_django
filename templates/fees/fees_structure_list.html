@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}Fees Structures Table{% endblock title %}
+{% block content %}
+<div class="container-fluid py-5">
+    {% if messages %}
+    <div id="message-alert" class="alert alert-info">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="container-fluid py-5">
+        <div class="card mb-4">
+            <h5 class="card-header">Search Fees Structures Records</h5>
+            <div class="card-body">
+                <form method="GET" class="row align-items-center">
+                    <!-- Course Filter Dropdown -->
+                    <div class="col-md-4 mb-3">
+                        <label for="course" class="form-label">Course</label>
+                        <select class="form-select" id="course" name="course">
+                            <option value="" selected>Select Course</option>
+                            {% for course in courses %}
+                                <option value="{{ course.id }}" {% if course.id|stringformat:"s" == request.GET.course %}selected{% endif %}>{{ course.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="year" class="form-label">Year</label>
+                        <select class="form-select" id="year" name="year">
+                            <option value="" selected>Select Year</option>
+                            <option value="first year" {% if request.GET.year == "first year" %}selected{% endif %}>First Year</option>
+                            <option value="second year" {% if request.GET.year == "second year" %}selected{% endif %}>Second Year</option>
+                            <option value="third year" {% if request.GET.year == "third year" %}selected{% endif %}>Third Year</option>
+                            <option value="last year" {% if request.GET.year == "last year" %}selected{% endif %}>Last Year</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="text" name="search" id="search" class="form-control" placeholder="Search by name, cast, etc." value="{{ request.GET.search }}">
+                    </div>
+                    <div class="col-md-4 mt-3 d-flex">
+                        <button type="submit" class="btn btn-primary me-2">Search</button>
+                        <a href="{% url 'fees_structure_list' %}" class="btn btn-secondary">Reset</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h5 class="card-header">Fees Structure Table</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Course Name</th>
+                        <th>Cast</th>
+                        <th>Amount</th>
+                        <th>Year</th>
+                        <th>Status</th>
+                        <th>Name</th>
+                        <th>Is Gap</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fees_structure in page_obj %}
+                    <tr>
+                        <td>{{ fees_structure.pk }}</td>
+                        <td>{{ fees_structure.course_id.name }}</td>
+                        <td>{{ fees_structure.cast }}</td>
+                        <td>{{ fees_structure.amount }}</td>
+                        <td>{{ fees_structure.year }}</td>
+                        <td><span class="badge bg-success">{{ fees_structure.status }}</span></td>
+                        <td><a href="{% url 'fees_structure_detail' fees_structure.pk %}"> {{ fees_structure.name }}</a></td>
+                        <td>{{ fees_structure.is_gap }}</td>
+                        <td> 
+                            <a href="{% url 'fees_structure_toggle_status' fees_structure.pk %}" class="btn btn-sm btn-warning">
+                                {% if fees_structure.status == 'active' %}
+                                    <i class="bi bi-eye-slash"></i> Deactivate
+                                {% else %}
+                                    <i class="bi bi-eye"></i> Activate
+                                {% endif %}
+                              </a>
+                            <a href="{% url 'fees_structure_update' fees_structure.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                            <form method="post" action="{% url 'fees_Structure_delete' fees_structure.pk %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
+                            </form> 
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- Pagination controls -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% if request.GET.course %}course={{ request.GET.course }}&{% endif %}{% if request.GET.year %}year={{ request.GET.year }}&{% endif %}{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item"><a class="page-link" href="?{% if request.GET.course %}course={{ request.GET.course }}&{% endif %}{% if request.GET.year %}year={{ request.GET.year }}&{% endif %}{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% if request.GET.course %}course={{ request.GET.course }}&{% endif %}{% if request.GET.year %}year={{ request.GET.year }}&{% endif %}{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<script>document.addEventListener("DOMContentLoaded", function() {
+    // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+    setTimeout(function() {
+      var messageAlert = document.getElementById("message-alert");
+      if (messageAlert) {
+        messageAlert.style.display = "none"; // Hide the message
+      }
+    }, 3000); // 3000ms = 3 seconds
+  });</script>
+{% endblock javascripts %}
+

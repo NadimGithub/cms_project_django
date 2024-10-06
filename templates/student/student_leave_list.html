@@ -1,0 +1,112 @@
+
+
+{% extends "base.html" %}
+{%block title%}student view{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+
+{% block content %}
+ <div class="container-fluid py-5">
+  {% if messages %}
+    <div id="message-alert" class="alert alert-info">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+  {% endif %}
+    <div class="card">
+      <h5 class="card-header">student details view</h5>
+      <div class="card-body">
+        <form method="GET" class="mb-3">
+            <input type="text" name="q" class="form-control" placeholder="Search by name or status" value="{{ search_query }}">
+            <button type="submit" class="btn btn-primary mt-2">Search</button>
+        </form>
+      <div class="table-responsive text-nowrap">
+        <table class="table">
+          <thead>
+            <tr>
+                <th>Sr NO.</th>
+                <th>Student id</th>
+                <th>Student Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Actions</th>
+                <th>Approved By</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for leave in leaves %}
+            <tr>
+              <td>{{ leave.id}}</td>
+                <td>{{ leave.student.id }}</td>
+                <td>
+                  <a href="{% url 'student_leave_update' leave.id %}" class="text-decoration-none">{{ leave.student.first_name}}</a>       
+                  </td>
+                <td>{{ leave.start }}</td>
+                <td>{{ leave.end }}</td>
+                <td>{{ leave.reason }}</td>
+                <td>{{ leave.status }}</td>
+                <td>
+                  {% if request.user.role == 'teacher' %}
+                  <form method="post" action="{% url 'student_update_leave_status' leave.id %}" style="display: inline;">
+                      {% csrf_token %}
+                      <input type="hidden" name="status" value="Approved">
+                      <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                  </form>
+                  <form method="post" action="{% url 'student_update_leave_status' leave.id %}" style="display: inline;">
+                      {% csrf_token %}
+                      <input type="hidden" name="status" value="rejected">
+                      <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                  </form>
+                  {% endif %}
+              </td>
+              <td>{{ leave.student_approved_by }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+        </div>
+        <nav aria-label="Page navigation" class="mt-4">
+          <ul class="pagination justify-content-center">
+              {% if  page_obj.has_previous %}
+              <li class="page-item">
+                  <a class="page-link" href="?q={{ search_query }}&page={{  page_obj.previous_page_number }}">Previous</a>
+              </li>
+              {% endif %}
+              
+              {% for num in  page_obj.paginator.page_range %}
+              <li class="page-item {% if  page_obj.number == num %}active{% endif %}">
+                  <a class="page-link" href="?q={{ search_query }}&page={{ num }}">{{ num }}</a>
+              </li>
+              {% endfor %}
+              
+              {% if  page_obj.has_next %}
+              <li class="page-item">
+                  <a class="page-link" href="?q={{ search_query }}&page={{  page_obj.next_page_number }}">Next</a>
+              </li>
+              {% endif %}
+          </ul>
+      </nav>
+      </div>
+    </div>
+  </div>
+  
+  {% endblock content %} 
+  
+  {% block javascripts %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+        setTimeout(function() {
+          var messageAlert = document.getElementById("message-alert");
+          if (messageAlert) {
+            messageAlert.style.display = "none"; // Hide the message
+          }
+        }, 2000); // 3000ms = 3 seconds
+      });// 3 seconds delay before fading out
+</script>
+  {% endblock javascripts %}

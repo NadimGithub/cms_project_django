@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ subject.name }}</title>
+</head>
+<body>
+    <h1>{{ subject.name }}</h1>
+    <p>Type: {{ subject.type }}</p>
+    <p>Course ID: {{ subject.course_id }}</p>
+    <p>Marks/Credits: {{ subject.marks_credits }}</p>
+    <p>Duration: {{ subject.duration }}</p>
+    <p>Pattern: {{ subject.pattern }}</p>
+    <a href="{% url 'subject_update' subject.pk %}">Edit</a>
+    <a href="{% url 'subject_list' %}">Back to List</a>
+</body>
+</html>

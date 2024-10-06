@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% block title %}Add Attendance{% endblock title %}
+
+{% block content %} 
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="mb-4">Student Attendance</h2>
+        </div>
+        <div class="card-body">
+            <form id="myForm" method="POST" action="{% url 'student_attendance_create' %}" novalidate>
+                {% csrf_token %}
+                
+                <!-- Row 1: Course, Year, Semester, Division, Subject -->
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <label for="course_id" class="form-label">Course</label>
+                        <select class="form-select" id="course_id" name="course" onchange="fetchYear(this.value); fetchSubjects(this.value); fetchStudents();" required>
+                            <option value="" disabled selected>Select Course</option>
+                            {% for course in courses %}
+                                <option value="{{ course.id }}">{{ course.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="year" class="form-label">Year</label>
+                        <select class="form-select" id="year" name="year" onchange="fetchSemester(this.value); fetchStudents();" required>
+                            <option value="" selected>Select Year</option>
+                        </select>
+                    </div>
+                </div>
+    
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="semester" class="form-label">Semester</label>
+                        <select class="form-select" id="semester" name="semester" onchange="fetchDivision(this.value); fetchStudents();" required>
+                            <option value="" selected>Select Semester</option>
+                        </select>
+                    </div>
+    
+                    <div class="col-md-4">
+                        <label for="division" class="form-label">Division</label>
+                        <select class="form-select" id="division" name="division" onchange="fetchStudents();" required>
+                            <option value="" selected>Select Division</option>
+                        </select>
+                    </div>
+    
+                    <div class="col-md-4">
+                        <label for="sub_id" class="form-label">Subject</label>
+                        <select class="form-select" id="sub_id" name="subject" required>
+                            <option value="" disabled selected>Select Subject</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Student Attendance Table -->
+                <div class="container-fluid py-5">
+                    <div class="card">
+                        <h5 class="card-header">Student Attendance</h5>
+                        <div class="table-responsive text-nowrap">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center px-3" style="width: 15%;">Student ID</th>
+                                        <th class="text-left px-3" style="width: 40%;">Student Name</th>
+                                        <th class="text-center px-3" style="width: 45%;">Attendance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="student_table_body">
+                                    <!-- Students will be populated here by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary" onclick="editResults()">Edit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    // Function to fetch years based on selected course
+    function fetchYear(courseId) {
+        if (courseId) {
+            $.ajax({
+                url: "{% url 'fetch_years' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId
+                },
+                success: function(data) {
+                    $('#year').html(data);
+                }
+            });
+        }
+    }
+
+    // Function to fetch semesters based on selected year
+    function fetchSemester(year) {
+        var courseId = $('#course_id').val();
+        if (courseId && year) {
+            $.ajax({
+                url: "{% url 'fetch_semesters' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year
+                },
+                success: function(data) {
+                    $('#semester').html(data);
+                }
+            });
+        }
+    }
+
+    // Function to fetch divisions based on selected semester
+    function fetchDivision(semester) {
+        var courseId = $('#course_id').val();
+        var year = $('#year').val();
+        if (courseId && year && semester) {
+            $.ajax({
+                url: "{% url 'fetch_divisions' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year,
+                    'semester': semester
+                },
+                success: function(data) {
+                    $('#division').html(data);
+                }
+            });
+        }
+    }
+    
+    function fetchSubjects(courseId) {
+        if (courseId) {
+            $.ajax({
+                url: "{% url 'fetch_subjects' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId
+                },
+                success: function(data) {
+                    $('#sub_id').html(data);
+                }
+            });
+        }
+    }
+    function fetchStudents() {
+        var courseId = $('#course_id').val();
+        var year = $('#year').val();
+        var semester = $('#semester').val();
+        var division = $('#division').val();
+        
+        if (courseId && year && semester && division) {
+            $.ajax({
+                url: "{% url 'fetch_students_attendance' %}",  // Ensure this URL points to your view
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year,
+                    'semester': semester,
+                    'division': division
+                },
+                success: function(data) {
+                    var tableBody = '';
+                    if (data.students.length > 0) {
+                        data.students.forEach(function(student) {
+                            tableBody += `
+                                <tr>
+                                    <td>${student.id}</td>
+                                    <td>${student.first_name} ${student.last_name}</td>
+                                    <td class="text-center">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="attendance_${student.id}" id="present_${student.id}" value="present">
+                                            
+                                            <label class="form-check-label" for="present_${student.id}">Present</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="attendance_${student.id}" id="absent_${student.id}" value="absent">
+                                            <label class="form-check-label" for="absent_${student.id}">Absent</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                            
+                        });
+                        
+                    } else {
+                        tableBody = '<tr><td colspan="3" class="text-center">No students found.</td></tr>';
+                    }
+                    $('#student_table_body').html(tableBody);  // Populate the table body
+                }
+            });
+        }
+    }
+    
+    function editResults() {
+        // Implement edit functionality here if needed
+    }
+</script>
+{% endblock javascripts %}

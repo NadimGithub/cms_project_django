@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ course.name }}</title>
+</head>
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <h1>{{ course.name }}</h1>
+    <p>Institute ID: {{ course.institute_id }}</p>
+    <p>Start Date: {{ course.start_date }}</p>
+    <p>Status: {{ course.status }}</p>
+    <p>Intake Capacity: {{ course.intake_capacity }}</p>
+    <p>Duration: {{ course.duration }}</p>
+    <a href="{% url 'course_update' course.pk %}">Edit</a>
+    <a href="{% url 'course_list' %}">Back to List</a>
+</body>
+</html>

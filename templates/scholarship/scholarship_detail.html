@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ scholarship.title }}</title>
+</head>
+<body>
+    <h1>{{ scholarship.title }}</h1>
+    <p>Eligibility: {{ scholarship.eligibility }}</p>
+    <p>Amount: {{ scholarship.amount }}</p>
+    <p>Deadline: {{ scholarship.deadline }}</p>
+    <p>Details: {{ scholarship.details }}</p>
+    <a href="{% url 'scholarship_update' scholarship.pk %}">Edit</a>
+    <a href="{% url 'scholarship_list' %}">Back to List</a>
+</body>
+</html>

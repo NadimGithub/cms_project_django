@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+    {%block title%}Add Institute{%endblock title%}
+    {% block stylesheets %}
+        
+    {% endblock stylesheets %}
+    
+    {% block content %} 
+    
+    
+                <main class="contents px-5 py-5">
+                   <div class="container-fluid">
+                        <div class="mb-3">
+                            <h3>this is main content attendence</h3>
+                        </div> 
+                       
+                                         <!-----Add form ------>
+                                         <div class="container mt-5">
+                                            <h2 class="mb-4">Timetable Form</h2>
+                                            <form id="myForm"method="POST" novalidate>
+                                                {% csrf_token %}
+                                                <!-- Rowcsrf 1 -->
+                                                <div class="row mb-3">
+                                                    <div class="col-md-4">
+                                                        <label for="course_id" class="form-label">Course ID</label>
+                                                        <select class="form-select"id="course_id" name="course_id"required>
+                                                            {% for courses in course %}
+                                                            <option value="{{courses.id}}"{% if course.id == form.course_id.value %}selected{% endif %}>{{courses.name}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Row 2 -->
+                                                <div class="row mb-3">.value
+                                                    <div class="col-md-6">
+                                                        <label for="day" class="form-label">Day</label>
+                                                        <select class="form-select" id="day" name="day"  required>
+                                                            <option value="monday"{% if form.day.value == 'monday' %}selected{% endif %}>Monday</option>
+                                                            <option value="tuesday" {% if form.day.value == 'tuesday' %}selected{% endif %}>Tuesday</option>
+                                                            <option value="wednesday" {% if form.day.value == 'wednesday' %}selected{% endif %}>Wednesday</option>
+                                                            <option value="thursday" {% if form.day.value == 'thursday' %}selected{% endif %}>Thursday</option>
+                                                            <option value="friday" {% if form.day.value == 'friday' %}selected{% endif %}>Friday</option>
+                                                            <option value="saturday" {% if form.day.value == 'saturday' %}selected{% endif %}>Saturday</option>
+                                                            <option value="sunday" {% if form.day.value == 'sunday' %}selected{% endif %}>Sunday</option>
+                                                        </select>
+                                                       
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="start" class="form-label">Start Time</label>
+                                                        <input type="time" class="form-control" id="start" name="start"  value="{{ form.start.value|time:'H:i' }}" required>
+                                                       
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Row 3 -->
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="end" class="form-label">End Time</label>
+                                                        <input type="time" class="form-control" id="end" name="end"  value="{{ form.end.value|time:'H:i' }}"required>
+                                                       
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="subject_id" class="form-label">Subject Name</label>
+                                                        <select class="form-select" id="subject_id" name="subject_id" required>
+                                                            <option value="" disabled selected>Select subject Name</option>
+                                                            {% for subjects in subject %}
+                                                                <option value="{{ subjects.id }}"{%if form.subject_id.value%}selected {%endif%}>{{ subjects.id }}-{{ subjects.name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="teacher_id" class="form-label">Staff Name</label>
+                                                        <select class="form-select" id="teacher_id" name="teacher_id" required>
+                                                            <option value="" disabled selected>Select Staff Name</option>
+                                                            {% for staffs in staff %}
+                                                                <option value="{{ staffs.id }}"{%if form.teacher_id.value%}selected {%endif%}>{{ staffs.id }}-{{ staffs.name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                            </form>
+                                        </div>            
+                                        {% endblock content %} 
+      
+                                        {% block javascripts %}
+                                        
+                                        {% endblock javascripts %}    
+    <a href="{% url 'timetable_list' %}">Back to List</a>
+
+</body>
+</html>

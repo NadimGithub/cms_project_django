@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% block title %}Student Attendance View{% endblock title %}
+{% block content %}
+<div class="container-fluid py-5">
+    <h5 class="mb-4">Filter Students</h5>
+    <form method="GET">
+        <div class="form-row">
+            <div class="col-md-4">
+                <label for="course" class="form-label">Course</label>
+                <select class="form-select" id="course" name="course" onchange="fetchYear(this.value)" >
+                    <option value="" disabled selected>Select Course</option>
+                    {% for course in courses %}
+                        <option value="{{ course.id }}" {% if request.GET.course == course.id %}selected{% endif %}>{{ course.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="year" class="form-label">Year</label>
+                <select class="form-select" id="year" name="year" onchange="fetchSemester(this.value)" >
+                    <option value="" selected>Select Year</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="semester" class="form-label">Semester</label>
+                <select class="form-select" id="semester" name="semester" onchange="fetchDivision(this.value)" >
+                    <option value="" selected>Select Semester</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="division" class="form-label">Division</label>
+                <select class="form-select" id="division" name="division" onchange="fetchStudents()">
+                    <option value="" selected>Select Division</option>
+                </select>
+            </div>
+            </div>
+            <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="subject" class="form-label">Subject Name</label>
+                <select class="form-select" id="subject" name="subject" >
+                    <option value="" disabled selected>Select Subject</option>
+                    {% for subj in subjects %}
+                        <option value="{{ subj.id }}" {% if request.GET.subject == subj.id %}selected{% endif %}>{{ subj.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="search" class="form-label">Search by Student Name</label>
+                <input type="text" class="form-control" id="search" name="search" value="{{ request.GET.search }}" placeholder="Search by name">
+            </div>
+            <div class="col-md-2">
+                <label for="date">Date</label>
+                <input type="date" class="form-control" name="date" id="date" value="{{ request.GET.date }}">
+            </div>
+            </div>
+            <div class="col-md-2 mt-4">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+    <div class="card mt-5">
+        <h5 class="card-header">Student Attendance Details</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
+                        <th>Date</th>
+                        <th>Course</th>
+                        <th>Year</th>
+                        <th>Semester</th>
+                        <th>Division</th>
+                        <th>Subject</th>
+                        <th>Staff Name</th>
+                        <th>Status</th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody id="student_table_body">
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ student.student.id }}</td>
+                            <td>{{ student.student.first_name }} {{ student.student.last_name }}</td>
+                            <td>{{ student.date }}</td>
+                            <td>{{ student.course.name }}</td>
+                            <td>{{ student.year }}</td>
+                            <td>{{ student.semester }}</td>
+                            <td>{{ student.division}}</td>
+                            <td>{{ student.subject.name }}</td>
+                            <td>{{ student.staff.name }}</td>
+                            <td>
+                                {% if student.present %}
+                                    Present
+                                {% else %}
+                                    Absent
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if request.user.role == 'teacher' %}
+                                    {% if student.present %}
+                                        <a href="{% url 'attandance_toggle_status' student.id %}" class="btn btn-sm btn-warning">
+                                            <i class="bi bi-eye-slash"></i> Mark Absent
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'attandance_toggle_status' student.id %}" class="btn btn-sm btn-warning">
+                                            <i class="bi bi-eye"></i> Mark Present
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="First">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&lsaquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+    
+            {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+            {% endfor %}
+    
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&rsaquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    function fetchYear(courseId) {
+        if (courseId) {
+            $.ajax({
+                url: "{% url 'fetch_years' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId
+                },
+                success: function(data) {
+                    $('#year').html(data);  // Populate the year select element
+                }
+            });
+        }
+    }
+
+    function fetchSemester(year) {
+        var courseId = $('#course').val();
+        if (courseId && year) {
+            $.ajax({
+                url: "{% url 'fetch_semesters' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year
+                },
+                success: function(data) {
+                    $('#semester').html(data);  // Populate the semester select element
+                }
+            });
+        }
+    }
+
+    function fetchDivision(semester) {
+        var courseId = $('#course').val();
+        var year = $('#year').val();
+        if (courseId && year && semester) {
+            $.ajax({
+                url: "{% url 'fetch_divisions' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year,
+                    'semester': semester
+                },
+                success: function(data) {
+                    console.log(data); // Log the response to check
+                    $('#division').html(data);  // Populate the division select element
+                },
+                error: function(xhr, status, error) {
+                    console.error(error); // Log any errors
+                }
+            });
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+        setTimeout(function() {
+            var messageAlert = document.getElementById("message-alert");
+            if (messageAlert) {
+                messageAlert.style.display = "none"; // Hide the message
+            }
+        }, 3000); // 3000ms = 3 seconds
+    });
+</script>
+{% endblock javascripts %}

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transaction {{ transaction.pk }}</title>
+</head>
+<body>
+    <h1>Transaction {{ transaction.pk }}</h1>
+    <p>Book: {{ transaction.book_id }}</p>
+    <p>Issue Date: {{ transaction.issue_date }}</p>
+    <p>Return Date: {{ transaction.return_date }}</p>
+    <p>Issued To: {{ transaction.issued_to.username }}</p>
+    <p>Status: {{ transaction.status }}</p>
+    <a href="{% url 'transaction_update' transaction.pk %}">Edit</a>
+    <a href="{% url 'transaction_list' %}">Back to List</a>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admission {{ admission.pk }}</title>
+</head>
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %} 
+    <h1>Admission {{ admission.pk }}</h1>
+    <p>Student ID: {{ admission.student_id }}</p>
+    <p>Course ID: {{ admission.course_id }}</p>
+    <p>Status: {{ admission.status }}</p>
+    <p>Documents: {{ admission.documents }}</p>
+    <p>Admission By: {{ admission.admission_by }}</p>
+    <p>Fees Structure: {{ admission.fees_structure }}</p>
+    <p>Fees Paid: {{ admission.fees_paid }}</p>
+    <p>Date of Apply: {{ admission.date_of_apply }}</p>
+    <p>Transaction Type: {{ admission.transaction_type }}</p>
+    <a href="{% url 'admission_update' admission.pk %}">Edit</a>
+    <a href="{% url 'admission_list' %}">Back to List</a>
+</body>
+</html>

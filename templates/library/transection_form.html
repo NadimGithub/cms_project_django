@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% block title %}Update Library Transaction{% endblock title %}
+
+{% block content %}
+<main class="contents px-5 py-5">
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3>Update Library Transaction</h3>
+        </div>
+
+        <div class="container mt-5">
+            <h2 class="mb-4">Update Book Issue Form</h2>
+
+            <!-- Display error messages -->
+            {% if messages %}
+            <div id="message-container" class="alert alert-danger">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form id="myForm" method="POST" novalidate>
+                {% csrf_token %}
+
+                <!-- Course and Year Selection -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="course_id" class="form-label">Course</label>
+                        <select class="form-select" name="course_id" id="course_id" onchange="fetchbook(this.value, {{ form.instance.book_id.id }})" required>
+                            <option value="" selected>Select course</option>
+                            {% for course in course %}
+                                <option value="{{ course.id }}" {% if course.id == form.instance.course_id.id %}selected{% endif %}>{{ course.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="year" class="form-label">Year</label>
+                        <select class="form-select" id="year" name="year">
+                            <option value="" selected>Select Year</option>
+                            <option value="first year" {% if form.instance.year == "first year" %}selected{% endif %}>First Year</option>
+                            <option value="second year" {% if form.instance.year == "second year" %}selected{% endif %}>Second Year</option>
+                            <option value="third year" {% if form.instance.year == "third year" %}selected{% endif %}>Third Year</option>
+                            <option value="last year" {% if form.instance.year == "last year" %}selected{% endif %}>Last Year</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Book Information -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="isbn" class="form-label">ISBN</label>
+                        <input type="text" class="form-control" id="isbn" name="isbn" value="{{ form.instance.book_id.isbn }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="book_id" class="form-label">Select Book</label>
+                        <select class="form-select" id="book_id" name="book_id" required>
+                            <option value="" disabled>Select book</option>
+                            {% for book in books %}
+                                <option value="{{ book.id }}" {% if book.id == form.instance.book_id.id %}selected{% endif %}>{{ book.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Issue and Return Dates -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="issueDate" class="form-label">Issue Date</label>
+                        <input type="date" class="form-control" id="issueDate" name="issue_date" value="{{ form.instance.issue_date|date:'Y-m-d' }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="returnDate" class="form-label">Return Date</label>
+                        <input type="date" class="form-control" id="returnDate" name="return_date" value="{{ form.instance.return_date|date:'Y-m-d' }}">
+                    </div>
+                </div>
+
+                <!-- Issued To Section -->
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="issuedTo" class="form-label">Issued To</label>
+                        <select class="form-select" id="issuedTo" name="issued_to" required>
+                            <option value="">Select Issued To</option>
+                            <option value="student" {% if form.instance.issued_to == 'student' %}selected{% endif %}>Student</option>
+                            <option value="staff" {% if form.instance.issued_to == 'staff' %}selected{% endif %}>Staff</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Staff and Student Selection -->
+                <div class="row mb-3" id="staffField" {% if form.instance.issued_to != 'staff' %}style="display: none;"{% endif %}>
+                    <div class="col-md-6">
+                        <label for="staff" class="form-label">Staff</label>
+                        <select class="form-select" name="staff" id="staff">
+                            <option value="" disabled selected>Select staff</option>
+                            {% for staff in staff %}
+                                <option value="{{ staff.id }}" {% if form.instance.staff and staff.id == form.instance.staff.id %}selected{% endif %}>{{ staff.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3" id="studentField" {% if form.instance.issued_to != 'student' %}style="display: none;"{% endif %}>
+                    <div class="col-md-6">
+                        <label for="student" class="form-label">Student</label>
+                        <select class="form-select" name="student" id="student">
+                            <option value="" disabled selected>Select Student</option>
+                            {% for student in Students %}
+                                <option value="{{ student.id }}" {% if form.instance.student and student.id == form.instance.student.id %}selected{% endif %}>{{ student.first_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+{% block javascripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    // Hide messages after 3 seconds
+    setTimeout(function() {
+        $('#message-container').fadeOut('slow');
+    }, 2000);
+
+    // Automatically fetch books if a course was selected
+    document.addEventListener('DOMContentLoaded', function () {
+        var courseId = document.getElementById('course_id').value;
+        var selectedBookId = {{ form.instance.book_id.id }};
+        if (courseId) {
+            fetchbook(courseId, selectedBookId);
+        }
+    });
+
+    function fetchbook(courseId, selectedBookId) {
+        if (courseId) {
+            $.ajax({
+                url: "{% url 'fetch_books' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId
+                },
+                success: function (data) {
+                    $('#book_id').html(data);  // Populate the book select element
+                    if (selectedBookId) {
+                        $('#book_id').val(selectedBookId); // Set the selected book
+                    }
+                }
+            });
+        }
+    }
+
+    // Handle "Issued To" selection to toggle staff/student fields
+    document.getElementById('issuedTo').addEventListener('change', function () {
+        var issuedToValue = this.value;
+        var staffField = document.getElementById('staffField');
+        var studentField = document.getElementById('studentField');
+        var staffSelect = document.getElementById('staff');
+        var studentSelect = document.getElementById('student');
+
+        if (issuedToValue === 'staff') {
+            staffField.style.display = 'block';
+            studentField.style.display = 'none';
+            studentSelect.value = '';  // Clear student selection
+        } else if (issuedToValue === 'student') {
+            studentField.style.display = 'block';
+            staffField.style.display = 'none';
+            staffSelect.value = '';  // Clear staff selection
+        } else {
+            staffField.style.display = 'none';
+            studentField.style.display = 'none';
+            staffSelect.value = '';  // Clear staff selection
+            studentSelect.value = '';  // Clear student selection
+        }
+    });
+</script>
+{% endblock javascripts %}

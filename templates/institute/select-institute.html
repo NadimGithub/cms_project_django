@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% block title %}Select Institute{% endblock title %}
+{% block stylesheets %}
+<style>
+    body {
+        background-color: #000;
+        color: #fff;
+    }
+
+    .container-fluid {
+        padding: 0;
+    }
+
+    .card {
+        background-color:var(--bs-dark);
+        border: 1px solid #444;
+        margin-bottom: 20px;
+        margin-left: 30px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        color: #fff;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+
+    .btnselect {
+    background-color: var(--bs-dark);
+    border-color: #444;
+    color: #fff;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-right: 30px; /* Add margin to the right */
+}
+
+.btnselect:hover {
+    transform: scale(1.1);
+}
+
+
+    .no-gutters {
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+    .modal-body {
+        background-color: #222;
+        color: #fff;
+    }
+
+    .form-label {
+        color: #ccc;
+    }
+    .mb-4{
+        padding-left: 30px;
+        padding-top: 30px;
+    }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-3">
+   
+    
+    {% if request.user.role == "admin" %}
+    <div class="row align-items-center no-gutters mb-4">
+        <div class="col-md-8">
+            <div class="card p-3">
+                <h5 class="card-title">Admin Panel</h5>
+                <p class="card-text">Manage your institutes efficiently.</p>
+            </div>  
+        </div>
+        <div class="d-flex justify-content-start mb-4" style="margin-top: -40px;">
+            <button type="button" class="btn btnselect" data-bs-toggle="modal" data-bs-target="#addInstituteModal">Add Institute</button>
+        </div>  
+    </div>
+    {% endif %}
+
+ 
+    <div class="row g-3">
+        {% for institute in institutes %}
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="get_institute_id" value="{{ institute.id }}">
+                <button type="submit" class="btn btn-link p-0 text-decoration-none" style="width: 100%; border: none;">
+                    <div class="card">
+                        <h2 class="mb-4" style="color:#f5931b; text-align: center; font-weight: bold;">Select Institute</h2>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ institute.name }}</h5>
+                            <p class="card-text">{{ institute.address }}</p>
+                        </div>
+                    </div>
+                </button>
+            </form>
+        </div>
+    </div>
+
+   
+ 
+<div class="modal fade" id="addInstituteModal" tabindex="-1" aria-labelledby="addInstituteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addInstituteModalLabel">Add Institute</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'institute_create' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                  
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="number" class="form-label">Mobile Number</label>
+                            <input type="text" class="form-control" id="number" name="number" required>
+                        </div>
+                    </div>
+                   
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="state" class="form-label">State</label>
+                            <input type="text" class="form-control" id="state" name="state" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="pincode" class="form-label">Pincode</label>
+                            <input type="text" class="form-control" id="pincode" name="pincode" required>
+                        </div>
+                    </div>
+                   
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="district" class="form-label">District</label>
+                            <input type="text" class="form-control" id="district" name="district" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="type" class="form-label">Type</label>
+                            <input type="text" class="form-control" id="type" name="type" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="status" class="form-label">Status</label>
+                            <input type="text" class="form-control" id="status" name="status" required>
+                        </div>
+                    </div>
+                  
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="logo" class="form-label">Logo</label>
+                            <input type="file" class="form-control" id="logo" name="logo" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="tagline" class="form-label">Tagline</label>
+                            <input type="text" class="form-control" id="tagline" name="tagline" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="affiliation" class="form-label">Affiliation</label>
+                            <input type="text" class="form-control" id="affiliation" name="affiliation" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+        {% empty %}
+        <p>No institutes available.</p>
+        {% endfor %}
+   
+
+{% endblock content %}
+
+{% block javascript %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock javascript %}
+
+  
+

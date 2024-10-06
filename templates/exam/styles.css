@@ -1,0 +1,64 @@
+
+ 
+    .questions {
+        margin-bottom: 20px;
+    }
+
+    .question {
+        margin-bottom: 20px;
+    }
+
+    .question h4 {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+    .marks {
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+    }
+
+    @media screen and (max-width: 600px) {
+        header {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .instructions {
+            flex-direction: column;
+        }
+
+        .code-box {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .question {
+            font-size: 14px;
+        }
+    }
+
+    @media print {
+        body {
+            background-color: white;
+        }
+
+        .question-paper {
+            width: auto;
+            max-width: none;
+            margin: 20mm;
+            border: none;
+            box-shadow: none;
+        }
+    }

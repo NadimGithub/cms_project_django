@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Student View{% endblock title %}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="card">
+        <h5 class="card-header">Student Details View</h5>
+        <div class="card-body">
+            <form method="get" class="form-inline">
+                {% csrf_token %}
+                <input type="text" name="q" class="form-control mr-2" placeholder="Search students..." value="{{ query }}">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Mobile Numbers</th>
+                        <th>Email</th>
+                        <th>Gender</th>
+                        <th>Status</th>
+                        <th>Action</th>    
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in page_obj %}
+                    <tr>
+                        <td>{{ student.id }}</td>
+                        <td><a href="{% url 'student_detail' student.pk %}">{{ student.first_name }} {{ student.middle_name }} {{ student.last_name }}</a></td>
+                        <td>{{ student.number }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.gender }}</td>
+                        <th>{{ student.status }}</th>
+                       
+                        <td>
+                            <a href="{% url 'student_update' student.pk %}" class="btn btn-sm btn-primary">
+                                <i class="bi bi-pen"></i> Edit
+                            </a>
+                            <a href="{% url 'update_document' student.pk %}" class="btn btn-sm btn-primary">
+                                <i class="bi bi-pen"></i> Document
+                            </a>
+                            <a href="{% url 'student_toggle_status' pk=student.pk %}" class="btn btn-sm btn-warning">
+                                {% if student.status == 'active' %}
+                                    <i class="bi bi-eye-slash"></i> Deactivate
+                                {% else %}
+                                    <i class="bi bi-eye"></i> Activate
+                                {% endif %}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination controls -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if query %}&q={{ query }}{% endif %}" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a></li>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock javascripts %}

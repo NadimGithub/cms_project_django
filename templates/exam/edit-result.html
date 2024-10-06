@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Edit Student Result{% endblock title %}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+<main class="contents px-5 py-5">
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3>Edit Student Result</h3>
+        </div> 
+
+        <!-----Add form ------>
+        <div class="container mt-5">
+            <h2 class="mb-4">Student Result Form</h2>
+            <form id="myForm" method="POST" novalidate>
+                {% csrf_token %}
+                <!-- Row for Course -->
+                <div class="col-md-4">
+                    <label for="course_id" class="form-label">Course</label>
+                    <select class="form-select" id="course_id" name="course_id" required>
+                        <option value="" disabled>Select Course</option>
+                        {% for course in courses %}
+                            <option value="{{ course.id }}" {% if course.id == result.course_id.id %}selected{% endif %}>{{ course.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Row for Year -->
+                <div class="col-md-4">
+                    <label for="year" class="form-label">Year</label>
+                    <input type="text" class="form-control" id="year" name="year" value="{{ result.year }}" readonly>
+                </div>
+            </div>
+        
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="semester" class="form-label">Semester</label>
+                    <input type="text" class="form-control" id="semester" name="semester" value="{{ result.semester }}" readonly>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="exam" class="form-label">Exam</label>
+                    <select class="form-select" id="exam" name="exam" required>
+                        <option value="" disabled>Select Exam</option>
+                        {% for exam in exams %}
+                            <option value="{{ exam.id }}" {% if exam.id == result.exam.id %}selected{% endif %}>{{ exam.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col-md-4">
+                    <label for="division" class="form-label">Division</label>
+                    <input type="text" class="form-control" id="division" name="division" value="{{ result.division }}" readonly>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="sub_id" class="form-label">Subject</label>
+                    <select class="form-select" id="sub_id" name="subject" required>
+                        <option value="" disabled>Select Subject</option>
+                        {% for subject in subjects %}
+                            <option value="{{ subject.id }}" {% if subject.id == result.subject.id %}selected{% endif %}>{{ subject.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Row for Marks -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="marks" class="form-label">Marks</label>
+                    <input type="number" class="form-control" id="marks" name="marks" value="{{ result.marks }}" required>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</main>
+{% endblock content %} 
+
+{% block javascripts %}
+    
+{% endblock javascripts %}

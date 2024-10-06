@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{%block title%}Add Institute{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %}
+
+            <main class="contents px-5 py-5">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3>this is main content attendence</h3>
+                    </div> 
+                   
+                                     <!-----Add form ------>
+                                     <div class="container mt-5">
+                                        <h2 class="mb-4">Scholarship Form</h2>
+                                        <form id="myForm" action="/submit-form" method="POST" novalidate>
+                                            <!-- Row 1 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="scholarshipId" class="form-label">ID</label>
+                                                    <input type="text" class="form-control" id="scholarshipId" name="scholarshipId" placeholder="Enter Scholarship ID" required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter the scholarship ID.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="studentId" class="form-label">Student ID</label>
+                                                    <input type="text" class="form-control" id="studentId" name="studentId" placeholder="Enter Student ID" required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter the student ID.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Row 2 -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="schoolDocuments" class="form-label">School Documents</label>
+                                                    <input type="file" class="form-control" id="schoolDocuments" name="schoolDocuments" multiple required>
+                                                    <div class="invalid-feedback">
+                                                        Please upload the school documents.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="status" class="form-label">Status</label>
+                                                    <select class="form-select" id="status" name="status" required>
+                                                        <option value="" disabled selected>Select Status</option>
+                                                        <option value="pending">Pending</option>
+                                                        <option value="approved">Approved</option>
+                                                        <option value="rejected">Rejected</option>
+                                                    </select>
+                                                    <div class="invalid-feedback">
+                                                        Please select a status.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+           
+                                    {% endblock content %} 
+  
+                                    {% block javascripts %}
+                                    
+                                    {% endblock javascripts %}    

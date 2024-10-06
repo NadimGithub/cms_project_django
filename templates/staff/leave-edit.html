@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{%block title%}Add Institute{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+
+            <main class="contents px-5 py-5">
+
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3>edit attendance</h3>
+                    </div> 
+                  
+                   <div class="container mt-5">
+                    <form id="myForm"  method="POST" novalidate>
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="reason" class="form-label">Reason</label>
+                                <input type="text" class="form-control" id="reason" name="reason" value="{{ form.reason.value}}" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="start" class="form-label">Start</label>
+                                <input type="date" class="form-control" id="start" name="start" value="{{ form.start.value|date:'Y-m-d'  }}" required>
+                                
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="end" class="form-label">End</label>
+                                <input type="date" class="form-control" id="end" name="end" value="{{ form.end.value|date:'Y-m-d' }}" required>
+                            </div>
+                        </div>
+                
+                        <!-- Third Row -->
+            
+                        <!-- Submit and Reset Buttons -->
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="reset" class="btn btn-secondary">Clear Form</button>
+                    </form>
+                </div>
+            
+ 
+{% endblock content %} 
+  
+{% block javascripts %}
+
+{% endblock javascripts %}    

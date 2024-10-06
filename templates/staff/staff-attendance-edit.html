@@ -1,0 +1,76 @@
+               
+{% extends "base.html" %}
+{%block title%}Add Institute{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+
+
+           
+            <main class="contents px-5 py-5">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3>this is main content staff - Attendence</h3>
+                    </div> 
+                   
+                     <!----- Add form ------>
+
+                     <body>
+                        <div class="container mt-5">
+                            <form id="myForm" action="/submit-form" method="POST" novalidate>
+                                <!-- First Row -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="id" class="form-label">ID</label>
+                                        <input type="text" class="form-control" id="id" name="id" required pattern="^[a-zA-Z0-9]+$">
+                                       
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="staff_id" class="form-label">Staff ID</label>
+                                        <input type="text" class="form-control" id="staff_id" name="staff_id" required pattern="^[a-zA-Z0-9]+$">
+                                        
+                                    </div>
+                                </div>
+                                
+                                <!-- Second Row -->
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label for="date" class="form-label">Date</label>
+                                        <input type="date" class="form-control" id="date" name="date" required>
+                                       
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="status" class="form-label">Status</label>
+                                        <select class="form-select" id="status" name="status" required>
+                                            <option value="" disabled selected>Select status</option>
+                                            <option value="active">Active</option>
+                                            <option value="inactive">Inactive</option>
+                                        </select>
+                                       
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="remarks" class="form-label">Remarks</label>
+                                        <input type="text" class="form-control" id="remarks" name="remarks" pattern="^[a-zA-Z0-9\s,.-]+$">
+                                      
+                                    </div>
+                                </div>
+                                
+                                
+                                
+                                <!-- Submit and Reset Buttons -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="reset" class="btn btn-secondary">Clear Form</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+{% endblock content %} 
+  
+{% block javascripts %}
+
+{% endblock javascripts %}    

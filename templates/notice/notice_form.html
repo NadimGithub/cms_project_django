@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Edit Notice{% endblock title %}
+{% block stylesheets %}
+    <!-- Add your stylesheets here if needed -->
+{% endblock stylesheets %}
+
+{% block content %} 
+<main class="contents px-5 py-5">
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3>This is the main content for Attendance</h3>
+        </div> 
+
+        <div class="container mt-5">
+            <h2 class="mb-4">Notice Form</h2>
+            <form id="myForm" method="POST">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" value="{{ form.title.value|default_if_none:'' }}" required>
+                </div>
+            
+                <div class="mb-3">
+                    <label for="content" class="form-label">Content</label>
+                    <textarea class="form-control" id="content" name="content" rows="4" required>{{ form.content.value|default_if_none:'' }}</textarea>
+                </div>
+            
+                <div class="mb-3">
+                    <label for="date_of_publish" class="form-label">Date of Publish</label>
+                    <input type="date" class="form-control" id="date_of_publish" name="date_of_publish" value="{{ form.date_of_publish.value|date:'Y-m-d'|default_if_none:'' }}" required>
+                </div>
+            
+                <div class="mb-3">
+                    <label for="date_of_end" class="form-label">Date of End</label>
+                    <input type="date" class="form-control" id="date_of_end" name="date_of_end" value="{{ form.date_of_end.value|date:'Y-m-d'|default_if_none:'' }}" required>
+                </div>
+            
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="active" {% if form.status.value == 'active' %}selected{% endif %}>Active</option>
+                        <option value="inactive" {% if form.status.value == 'inactive' %}selected{% endif %}>Inactive</option>
+                    </select>
+                </div>
+            
+                <div class="mb-3">
+                    <label for="notice_type" class="form-label">Notice Type</label>
+                    <input type="text" class="form-control" id="notice_type" name="notice_type" value="{{ form.notice_type.value|default_if_none:'' }}" required>
+                </div>
+            
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+             
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+{% block javascripts %}
+    <!-- Add your JavaScript here if needed -->
+{% endblock javascripts %}

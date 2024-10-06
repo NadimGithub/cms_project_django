@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{%block title%}Add Subject{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+    <!-----Add form ------>
+    <div class="container mt-5">
+        {% if messages %}
+        <div id="message-alert" class="alert alert-info">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+        <form  action="{% url "subject_create" %}" method="POST" >
+            {% csrf_token %}
+            <!-- First Row -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="name" class="form-label">Subject Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                    
+                </div>
+                <div class="col-md-4">
+                    <label for="type" class="form-label">Type</label>
+                    <select class="form-select" id="type" name="type" required>
+
+                        <option value="" disabled selected>Select type</option>
+                        <option value="practical">Practical</option>
+                        <option value="theory">Theory</option>
+                        <option value="theory">Both</option>
+                    </select>
+                   
+                </div>
+            </div>
+    
+            <!-- Second Row -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="course_id" class="form-label">Course</label>
+                    <select class="form-select" id="course_id" name="course_id" onchange="fetchYear(this.value)" required>
+                        <option value="" disabled selected>Select Course</option>
+                        {% for course in courses %}
+                            <option value="{{ course.id }}">{{ course.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="year" class="form-label">Year</label>
+                    <select class="form-select" id="year" name="year" onchange="fetchSemester(this.value)" required>
+                        <option value="" selected>Select Year</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="semester" class="form-label">Semester</label>
+                    <select class="form-select" id="semester" name="semester" onchange="fetchDivision(this.value)" required>
+                        <option value="" selected>Select Semester</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="marks_credits" class="form-label">Marks/Credits</label>
+                    <input type="number" class="form-control" id="marks_credits" name="marks_credits" min="0" required>
+                    
+                </div>
+                <div class="col-md-4">
+                    <label for="duration" class="form-label">Duration (in hours)</label>
+                    <input type="number" class="form-control" id="duration" name="duration" min="1" required>
+                    
+                </div>
+            </div>
+    
+            <!-- Third Row -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="pattern" class="form-label">Pattern</label>
+                    <input type="text" class="form-control" id="pattern" name="pattern" required>
+                   
+                </div>
+            </div>
+    
+            <!-- Submit and Reset Buttons -->
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="reset" class="btn btn-secondary">Clear Form</button>
+        </form>
+    </div>
+       
+{% endblock content %} 
+  
+{% block javascripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    function fetchYear(courseId) {
+        if (courseId) {
+            $.ajax({
+                url: "{% url 'fetch_years' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId
+                },
+                success: function(data) {
+                    $('#year').html(data);
+                }
+            });
+        }
+    }
+
+ function fetchSemester(year) {
+        var courseId = $('#course_id').val();
+        if (courseId && year) {
+            $.ajax({
+                url: "{% url 'fetch_semesters' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year
+                },
+                success: function(data) {
+                    $('#semester').html(data);
+                }
+            });
+        }
+    }
+
+    function fetchSemester(year) {
+        var courseId = $('#course_id').val();
+        if (courseId && year) {
+            $.ajax({
+                url: "{% url 'fetch_semesters' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year
+                },
+                success: function(data) {
+                    $('#semester').html(data);
+                }
+            });
+        }
+    }
+
+
+    {% comment %} function fetchDivision(semester) {
+        var courseId = $('#course_id').val();
+        var year = $('#year').val();
+        if (courseId && year && semester) {
+            $.ajax({
+                url: "{% url 'fetch_divisions' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year,
+                    'semester': semester
+                },
+                success: function(data) {
+                    $('#division').html(data);
+                }
+            });
+        }
+    } {% endcomment %}
+
+    // Hide the success message after a timeout
+    document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(function() {
+            var messageAlert = document.getElementById("message-alert");
+            if (messageAlert) {
+                messageAlert.style.display = "none"; // Hide the message
+            }
+        }, 4000); // 2 seconds
+    });
+</script>
+{% endblock javascripts %}

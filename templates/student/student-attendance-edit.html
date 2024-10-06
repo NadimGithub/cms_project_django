@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Update Student Attendance{% endblock title %}
+{% block stylesheets %}   
+{% endblock stylesheets %}
+
+{% block content %} 
+
+<main class="contents px-5 py-5">
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3>Update Attendance</h3>
+        </div>
+
+        <div class="container mt-5">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-4">Student Attendance</h2>
+                </div>
+                <div class="card-body">
+                    <form id="myForm" method="POST" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="row justify-content-center">
+                            <div class="col-md-4">
+                                <label for="staff" class="form-label">Staff Name</label>
+                                <select class="form-select" id="staff" name="staff" required>
+                                    <option value="" disabled>Select Staff Name</option>
+                                    {% for staff in staff %}
+                                        <option value="{{ staff.id }}" {% if staff.id == attendance.staff.id %}selected{% endif %}>{{ staff.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="subject" class="form-label">Subject Name</label>
+                                <select class="form-select" id="subject" name="subject" required>
+                                    <option value="" disabled>Select Subject Name</option>
+                                    {% for subj in subject %}
+                                        <option value="{{ subj.id }}" {% if subj.id == attendance.subject.id %}selected{% endif %}>{{ subj.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="date" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="date" name="date" value="{{ attendance.date|date:'Y-m-d'}}" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="student" class="form-label">Student ID</label>
+                                <input type="text" class="form-control" id="student" name="student" value="{{ attendance.student.id }}" required>
+                            </div>
+                            
+                            <div class="text-center">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="present" id="present" value="True" {% if attendance.present %}checked{% endif %}>
+                                    <label class="form-check-label" for="present">Present</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="present" id="absent" value="False" {% if not attendance.present %}checked{% endif %}>
+                                    <label class="form-check-label" for="absent">Absent</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mt-3">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock javascripts %}

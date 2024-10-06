@@ -1,0 +1,85 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center">Registration</h2>
+        <div class="col-md-8 offset-md-2">
+            <form action="{% url 'register' %}" method="post" enctype="multipart/form-data">  
+                {% csrf_token %}                
+                <div class="form-group">
+                    <label for="name">First Name</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter Your first name">
+                </div>
+                <div class="form-group">
+                    <label for="last_name">last Name</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Your last name">
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter Your last name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter Your Email Address">
+                </div>
+                <div class="form-group">
+                    <label for="Mobile">Mobile Number</label>
+                    <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Enter Your Phone Number">
+                </div>
+               
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="profile">role</label>
+                        <select class="form-control" id="role" name="role">
+                            <option value="">Select Profile</option>
+                            <option value="principal">Principal</option>
+                            <option value="hod">HOD</option>
+                            <option value="teacher">Teacher</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="password">Password</label>
+                        <input type="text" class="form-control" id="password1" name="password1" placeholder="Enter Your password">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="cpassword">Conform Password</label>
+                    <input type="text" class="form-control" id="cpassword2" name="password2" placeholder=" Conform password">
+                    </div>
+                    <div class="form-group">
+                        <label for="profile_image">Profile Image</label>
+                        <input type="file" class="form-control-file" id="profile_image" name="profile_image">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea class="form-control" id="address" name="address" rows="3" placeholder="Enter address"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Register</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

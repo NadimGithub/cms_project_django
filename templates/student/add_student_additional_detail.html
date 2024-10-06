@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+{% block title %}Additional Details{% endblock title %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+{% endblock stylesheets %}
+
+{% block content %}
+<main class="contents px-5 py-5">
+    <div class="container-fluid">
+        <div class="mb-3">
+            <h3>Add Student Details</h3>
+
+            <div class="container-fluid py-2">
+                <div class="row">
+                  <div class="col-xs-12 ">
+                    <nav>
+                        <hr>
+                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link Active" style="color: white; font-size:18px; font-weight: bold;" id="nav-home-tab" data-toggle="tab" href="{%url 'student_create'%}" role="tab" aria-controls="nav-home" aria-selected="true"><i class='bx bxs-user-plus' ></i> ADD STUDENT</a>
+                            <a class="nav-item nav-link" style="color: white; font-size:18px; font-weight: bold;" id="nav-profile-tab" data-toggle="tab" href="{%url 'student_details_create'%}" role="tab" aria-controls="nav-profile" aria-selected="false"><i class='bx bxs-user-detail' ></i> STUDENT DETAILS</a>
+                            <a class="nav-item nav-link" style="color: white; font-size:18px; font-weight: bold;" id="nav-contact-tab" data-toggle="tab" href="{%url 'student_tempaddress'%}" role="tab" aria-controls="nav-contact" aria-selected="false"><i class='bx bxs-home' ></i> ADDRESS</a>
+                            <a class="nav-item nav-link" style="color: white; font-size:18px; font-weight: bold;" id="nav-about-tab" data-toggle="tab" href="{%url 'documents'%}" role="tab" aria-controls="nav-about" aria-selected="false"><i class='bx bxs-cloud-download'></i> Upload Document</a>
+                          </div>
+                    </nav>
+        </div> 
+
+        <!-- Add form -->
+        <div class="container-fluid mt-5">
+            <h2 class="mb-4" style="color: white;">ADD DETAILS</h2>
+            <form id="studentForm" action="{% url 'student_details_create' %}" method="POST" novalidate>
+                {% csrf_token %}
+                <!-- Form fields here -->
+                <!-- Row 1 -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="registration_number" class="form-label">Registration Number</label>
+                        <input type="text" class="form-control {% if form.registration_number.errors %}is-invalid{% endif %}" id="registration_number" name="registration_number" value="{{ form.registration_number.value|default_if_none:'' }}" required>
+                        {% if form.registration_number.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.registration_number.errors }}
+                                    </div>
+                                {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="blood_group" class="form-label">Blood Group</label>
+                        <select class="form-control {% if form.blood_group.errors %}is-invalid{% endif %}" id="blood-group" name="blood_group" required aria-required="true">
+                            <option value="" disabled {% if not form.blood_group.value %}selected{% endif %}>Select blood group</option>
+                            <option value="A+" {% if form.blood_group.value == "A+" %}selected{% endif %}>A+</option>
+                            <option value="A-" {% if form.blood_group.value == "A-" %}selected{% endif %}>A-</option>
+                            <option value="B+" {% if form.blood_group.value == "B+" %}selected{% endif %}>B+</option>
+                            <option value="B-" {% if form.blood_group.value == "B-" %}selected{% endif %}>B-</option>
+                            <option value="O+" {% if form.blood_group.value == "O+" %}selected{% endif %}>O+</option>
+                            <option value="O-" {% if form.blood_group.value == "O-" %}selected{% endif %}>O-</option>
+                            <option value="AB+" {% if form.blood_group.value == "AB+" %}selected{% endif %}>AB+</option>
+                            <option value="AB-" {% if form.blood_group.value == "AB-" %}selected{% endif %}>AB-</option>
+                        </select>
+                        {% if form.blood_group.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.blood_group.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-control {% if form.category.errors %}is-invalid{% endif %}" id="category" name="category" required aria-required="true">
+                            <option value="" disabled {% if not form.category.value %}selected{% endif %}>Select category</option>
+                            <option value="general" {% if form.category.value == "general" %}selected{% endif %}>General</option>
+                            <option value="obc" {% if form.category.value == "obc" %}selected{% endif %}>OBC</option>
+                            <option value="sc" {% if form.category.value == "sc" %}selected{% endif %}>SC</option>
+                            <option value="st" {% if form.category.value == "st" %}selected{% endif %}>ST</option>
+                        </select>
+                        {% if form.category.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.category.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="caste" class="form-label">Cast</label>
+                        <input type="text" class="form-control {% if form.caste.errors %}is-invalid{% endif %} " id="caste" name="caste" value="{{ form.caste.value|default_if_none:'' }}"required>
+                        {% if form.caste.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.caste.errors }}
+                                    </div>
+                                {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="education_qualification" class="form-label">Education Qualification</label>
+                        <input type="text" class="form-control {% if form.education_qualification.errors %}is-invalid{% endif %} " id="education_qualification" name="education_qualification"  value="{{ form.education_qualification.value|default_if_none:'' }}" required>
+                        {% if form.education_qualification.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.education_qualification.errors }}
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="course" class="form-label">Course ID</label>
+                            <select class="form-select" id="course" name="course" onchange="fetchYear(this.value)" required>
+                                <option value="" disabled selected>Select Course</option>
+                                {% for course in courses %}
+                                <option value="{{course.id}}" {% if course.id == form.course.value %}selected{% endif %}>{{course.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="year" class="form-label">Year</label>
+                            <select class="form-select" id="year" name="year" onchange="fetchSemester(this.value)" required>
+                                <option value="" selected>Select year</option>
+                                <!-- Years will be dynamically populated -->
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="semester" class="form-label">Semester</label>
+                            <select class="form-select" id="semester" name="semester" onchange="fetchDivision(this.value)" required>
+                                <option value="" selected>Select semester</option>
+                                <!-- Semesters will be dynamically populated -->
+                            </select>
+                        </div>
+                    </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="name" class="form-label">Division</label>
+                                <select class="form-select" id="division" name="division" required>
+                                    <option value="" selected>Select division</option>
+                                    <!-- Divisions will be dynamically populated -->
+                                </select>
+                            </div>
+                            
+                    <div class="col-md-4">
+                        <label for="mother_name" class="form-label">Mother's Name</label>
+                        <input type="text" class="form-control  {% if form.education_qualmother_nameification.errors %}is-invalid{% endif %}  " id="mother_name" name="mother_name" value="{{ form.mother_name.value|default_if_none:'' }}" required>
+                        {% if form.mother_name.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.mother_name.errors}}
+                        </div>
+                    {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="student" class="form-label">Student Name</label>
+                        <select class="form-select" id="student" name="student" required>
+                            <option value="" disabled selected>Select Student Name</option>
+                            {% for student in students %}
+                            <option value="{{ student.id }}"{% if student.id == form.student.value %}selected{% endif %}>{{ student.first_name }}</option>
+                            {% endfor %}
+                        </select>
+                        {% if form.student.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.student.errors}}
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="dob" class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control {% if form.dob.errors %}is-invalid{% endif %}" id="dob" name="dob" value="{{ form.dob.value|default_if_none:'' }}"required aria-required="true" value="{{ form.dob.value }}">
+                        {% if form.dob.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.dob.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="nationality" class="form-label">Nationality</label>
+                        <select class="form-select" id="nationality" name="nationality" required>
+                            <option value="" disabled selected>Select Nationality</option>
+                            <option value="indian" {% if form.nationality.value == "indian" %}selected{% endif %}>Indian</option>
+                            <option value="other" {% if form.nationality.value == "other" %}selected{% endif %}>Other</option>
+                        </select>
+                        {% if form.nationality.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.nationality.errors}}
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+
+                <!-- Row 5 -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="admission_type" class="form-label">Admission Type</label>
+                        <select class="form-select" id="admission_type" name="admission_type" required>
+                            <option value="" disabled selected>Select Admission Type</option>
+                            <option value="cap" {% if form.admission_type.value == "cap" %}selected{% endif %}>CAP</option>
+                            <option value="management"{% if form.admission_type.value == "management" %}selected{% endif %}>Management</option>
+                        </select>
+                        {% if form.admission_type.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.admission_type.errors}}
+                        </div>
+                    {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="cap_id" class="form-label">CAP ID</label>
+                        <input type="number" class="form-control {% if form.cap_id.errors %}is-invalid{% endif %}" id="cap_id" name="cap_id" value="{{ form.cap_id.value|default_if_none:'' }}" required>
+                        {% if form.cap_id.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.cap_id.errors}}
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+
+                <div class="row mb-3" >
+                    <div class="col-md-4">
+                         <button type="submit" class="btn btn-primary">Submit</button>
+                         <button type="next" href="{%url 'student_tempaddress'%}" class="btn btn-primary">next page</button>
+                    </div>
+            </form>
+        </div>
+    </div>
+            </div>
+        </div>
+            </div>
+</main>
+
+{% endblock content %}
+
+{% block javascripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    function fetchYear(courseId) {
+        if (courseId) {
+            $.ajax({
+                url: "{% url 'fetch_years' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId
+                },
+                success: function(data) {
+                    $('#year').html(data);  // Populate the year select element
+                }
+            });
+        }
+    }
+    
+    function fetchSemester(year) {
+        var courseId = $('#course').val();
+        if (courseId && year) {
+            $.ajax({
+                url: "{% url 'fetch_semesters' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year
+                },
+                success: function(data) {
+                    $('#semester').html(data);  // Populate the semester select element
+                }
+            });
+        }
+    }
+    
+    function fetchDivision(semester) {
+        var courseId = $('#course').val();
+        var year = $('#year').val();
+        if (courseId && year && semester) {
+            $.ajax({
+                url: "{% url 'fetch_divisions' %}",
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year,
+                    'semester': semester
+                },
+                success: function(data) {
+                    console.log(data); // Log the response to check
+                    $('#division').html(data);  // Populate the division select element
+                },
+                error: function(xhr, status, error) {
+                    console.error(error); // Log any errors
+                }
+            });
+        }
+    }
+    
+    document.addEventListener("DOMContentLoaded", function() {
+    // Set a timeout to hide the message after 3 seconds (3000 milliseconds)
+    setTimeout(function() {
+      var messageAlert = document.getElementById("message-alert");
+      if (messageAlert) {
+        messageAlert.style.display = "none"; // Hide the message
+      }
+    }, 3000); // 3000ms = 3 seconds
+  });
+</script>
+{% endblock javascripts %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Staff View{% endblock title %}
+{% block stylesheets %}
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="card">
+        <h5 class="card-header">Exam details</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead> 
+                    <tr>
+                        <th> id</th>
+                        <th>Course Name</th>
+                        <th>Subject Name</th>
+                        <th>day</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Teacher Name</th>              
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for timetable in timetables %}
+                    <tr>
+                        <td><a href="{% url 'exam_update' timetable.pk%}">{{ timetable.id}}</td>
+                        <td>{{ timetable.course_id.name}}</a></td>
+                        <td>{{ timetable.subject_id.name }}</td>
+                        <td>{{ timetable.day}}</td>
+                        <td>{{ timetable.start}}</td>
+                        <td>{{ timetable.end }}</td>
+                        <td>{{ timetable.teacher_id.name}}</td>
+                            <td>
+                                <a href="{% url 'timetable_update' timetable.pk %}" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-pen"></i> Edit
+                                </a>
+                            </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock javascripts %}

@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block title %}Course Table{% endblock title %}
+{% block stylesheets %}
+    <!-- Your custom styles here -->
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    {% if messages %}
+    <div id="message-alert" class="alert alert-info">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div class="card mb-4">
+        <h5 class="card-header">Filter Division Records</h5>
+        <div class="card-body">
+            <form method="GET" class="row align-items-center justify-content-center">
+                <div class="row w-100 justify-content-center">
+                    <div class="col-md-4 mb-3">
+                        <label for="courseFilter" class="form-label">Select Course</label>
+                        <select name="course_id" id="courseFilter" class="form-control">
+                            <option value="">-- All Courses --</option>
+                            {% for course in courses %}
+                                <option value="{{ course.id }}" {% if course.id == selected_course %}selected{% endif %}>{{ course.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="yearFilter" class="form-label">Select Year</label>
+                        <select name="year" id="yearFilter" class="form-control">
+                            <option value="">-- All Years --</option>
+                            {% for year in years %}
+                                <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                   
+                    <div class="col-md-4 mb-3">
+                        <label for="subjectFilter" class="form-label">Select Subject</label>
+                        <select name="subject" id="subjectFilter" class="form-control">
+                            <option value="">-- All Subjects --</option>
+                            {% for subject in subjects %}
+                                <option value="{{ subject.id }}" {% if subject.id == selected_subject %}selected{% endif %}>{{ subject.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="d-flex align-items-center card-header">
+            <h5 class="mb-0">Exam Paper View</h5>
+            <div class="search-container">
+                <form method="GET" class="d-inline-flex justify-content-center">
+                    <input type="text" name="q" class="form-control" value="{{ search_query }}" placeholder="Search" style="width: 600px;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive text-nowrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Exam</th>
+                            <th>Date</th>
+                            <th>Course</th>
+                            <th>Year</th>
+                            <th>Semester</th>
+                            <th>Subject</th>
+                            <th>Staff</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exampaper in exampaper %}
+                            <tr>
+                                <td>{{ exampaper.id }}</td>
+                                <td><a href="{% url 'edit_exam_paper' exampaper.id %}">{{ exampaper.name }}</a></td>
+                                <td>{{ exampaper.date }}</td>
+                                <td>{{ exampaper.course.name }}</td>
+                                <td>{{ exampaper.year }}</td>
+                                <td>{{ exampaper.semester }}</td>
+                                <td>{{ exampaper.subject.name }}</td>
+                                <td>{{ exampaper.staff.name }}</td>
+                                <td>{{ exampaper.status }}</td>
+                                <td>
+                                    {% if request.user.role == 'principal' %}
+                                        <form method="post" action="{% url 'update_exam_status' exampaper.id %}" style="display: inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="status" value="approved">
+                                            <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                        </form>
+                                        <form method="post" action="{% url 'update_exam_status' exampaper.id %}" style="display: inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="status" value="rejected">
+                                            <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                        </form>
+                                    {% endif %}
+                                    <form method="post" action="{% url 'exam_paper_view' exampaper.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm">View Paper</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Controls -->
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if exampaper.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?course_id={{ selected_course }}&subject_id={{ selected_subject }}&year={{ selected_year }}&semester={{ selected_semester }}&q={{ search_query }}&page={{ exampaper.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in exampaper.paginator.page_range %}
+                        <li class="page-item {% if exampaper.number == num %}active{% endif %}">
+                            <a class="page-link" href="?course_id={{ selected_course }}&subject_id={{ selected_subject }}&year={{ selected_year }}&semester={{ selected_semester }}&q={{ search_query }}&page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endfor %}
+                    
+                    {% if exampaper.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?course_id={{ selected_course }}&subject_id={{ selected_subject }}&year={{ selected_year }}&semester={{ selected_semester }}&q={{ search_query }}&page={{ exampaper.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(function() {
+            var messageAlert = document.getElementById("message-alert");
+            if (messageAlert) {
+                messageAlert.style.display = "none";
+            }
+        }, 2000);
+    });
+</script>
+{% endblock javascripts %}

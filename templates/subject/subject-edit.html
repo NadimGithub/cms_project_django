@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{%block title%}Add subject{%endblock title%}
+{% block stylesheets %}
+    
+{% endblock stylesheets %}
+
+{% block content %} 
+
+
+<main class="contents px-5 py-5">
+    <div class="container-fluid">
+                                    <div class="mb-3">
+                                        <h3>Add subject details</h3>
+                                        </div> 
+                                     <div class="container mt-5">
+                                        <form id="myForm" action="{% url 'subject_update' subject.pk %}" method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <!-- First Row -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="name" class="form-label">Sbject Name</label>
+                                                    <input type="text" class="form-control" id="name" name="name" value="{{ form.name.value }}" equired>
+                                                   
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="type" class="form-label">Type</label>
+                                                    <select class="form-select" id="type" name="type" required>
+                                                        <option value="" disabled selected>Select type</option>
+                                                        <option value="practical"{% if form.type.value == "practical" %}selected{% endif %}>Practical</option>
+                                                        <option value="theory"{% if form.type.value == "theory" %}selected{% endif %}>Theory</option>
+                                                        <option value="both" {% if form.type.value == "both" %}selected{% endif %}>Both</option>
+                                                    </select>
+                                                   
+                                                </div>
+                                            </div>
+                                    
+                                            <!-- Second Row -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="course" class="form-label">Course</label>
+                                                    <select class="form-select" id="course_id" name="course_id" onchange="fetchYear(this.value)" required>
+                                                        <option value="" disabled selected>Select Course</option>
+                                                        {% for course in courses %}
+                                                            <option value="{{course.id}}">{{course.name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="year" class="form-label">Year</label>
+                                                    <select class="form-select" id="year" name="year" required onchange="fetchSemester(this.value)">
+                                                        <option value="" disabled selected>Select Year</option>
+                                                        <!-- Year options will be populated dynamically -->
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="semester" class="form-label">Semester</label>
+                                                    <select class="form-select" id="semester" name="semester" onchange="fetchDivision(this.value)" required>
+                                                        <option value="" selected>Select Semester</option>
+                                                    </select>
+                                                </div>
+                                             
+                                                <div class="col-md-4">
+                                                    <label for="marks_credits" class="form-label">Marks/Credits</label>
+                                                    <input type="number" class="form-control" id="marks_credits" name="marks_credits" value="{{ form.marks_credits.value }}" min="0" required>
+                                                   
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="duration" class="form-label">Duration (in hours)</label>
+                                                    <input type="number" class="form-control" id="duration" name="duration" min="1" value="{{ form.duration.value }}" required>
+                                                    
+                                                </div>
+                                            </div>
+                                    
+                                            <!-- Third Row -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <label for="pattern" class="form-label">Pattern</label>
+                                                    <input type="text" class="form-control" id="pattern" name="pattern"value="{{ form.pattern.value }}" required>
+                                                   
+                                                </div>
+                                            </div>
+                                            <!-- Submit and Reset Buttons -->
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="reset" class="btn btn-secondary">Clear Form</button>
+                                        </form>
+                                    </div>
+          
+
+{% endblock content %} 
+  
+{% block javascripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    function fetchYear(courseId) {
+        if (courseId) {
+            $.ajax({
+                url: "{% url 'fetch_years' %}",  // Ensure the URL name is correct
+                type: "GET",
+                data: {
+                    'course_id': courseId
+                },
+                success: function(data) {
+                    $('#year').html(data);  // Populate the year select element
+                    $('#semester').html('<option value="" disabled selected>Select Semester</option>'); // Reset semester
+                },
+                error: function() {
+                    alert('Failed to fetch years.');
+                }
+            });
+        }
+    }
+    
+    function fetchSemester(year) {
+        var courseId = $('#course_id').val();  // Make sure the course is still selected
+        if (courseId && year) {
+            $.ajax({
+                url: "{% url 'fetch_semesters' %}",  // Ensure the URL name is correct
+                type: "GET",
+                data: {
+                    'course_id': courseId,
+                    'year': year
+                },
+                success: function(data) {
+                    $('#semester').html(data);  // Populate the semester select element
+                },
+                error: function() {
+                    alert('Failed to fetch semesters.');
+                }
+            });
+        }
+    }
+
+    // Hide the success message after a timeout
+    document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(function() {
+            var messageAlert = document.getElementById("message-alert");
+            if (messageAlert) {
+                messageAlert.style.display = "none"; // Hide the message
+            }
+        }, 4000); // 2 seconds
+    });
+</script>
+{% endblock javascripts %}                             
