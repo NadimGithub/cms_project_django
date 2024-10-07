@@ -488,9 +488,14 @@
                     </form>
                     <ul class="navbar-nav ms-3 mx-3">
                         <li class="nav-item dropdown d-flex align-items-center">
-                            <a href="#" data-bs-toggle="dropdown" class="nav-icon d-flex align-items-center flex-row-reverse pe-md-0">
-                               <img src="{{ request.user.profile_image.url }}" class="avatar img-fluid rounded ms-2" alt=""> 
-                                <span class="text-white">{{request.user.first_name}}</span>
+                           <a href="#" data-bs-toggle="dropdown" class="nav-icon d-flex align-items-center flex-row-reverse pe-md-0">
+                                {% if request.user.profile_image %}
+                                    <img src="{{ request.user.profile_image.url }}" class="avatar img-fluid rounded ms-2" alt=""> 
+                                {% else %}
+                                    <!-- Optionally display a placeholder image if profile image doesn't exist -->
+                                    <img src="/path/to/placeholder.jpg" class="avatar img-fluid rounded ms-2" alt="">
+                                {% endif %}
+                                <span class="text-white">{{ request.user.first_name }}</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a href="{%url 'profile_page'%}" class="dropdown-item">Profile</a>
