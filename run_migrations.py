@@ -29,12 +29,12 @@ def run_migrations():
     # Make migrations for each app
     for app in apps:
         print(f"Making migrations for {app}...")
-        run_command(['python', 'manage.py', 'makemigrations', app])
+        run_command(['python3', 'manage.py', 'makemigrations', app])
 
     # Migrate for each app
     for app in apps:
         print(f"Running migrations for {app}...")
-        run_command(['python', 'manage.py', 'migrate', app])
+        run_command(['python3', 'manage.py', 'migrate', app])
 
     print("All migrations completed successfully.")
 

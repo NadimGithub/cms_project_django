@@ -118,12 +118,36 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'cms',
+#         'USER': 'cms_user',
+#         'PASSWORD': 'virat@2024',
+#         'HOST': 'localhost',
+#         'PORT': ' 5432',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'cms',
+        'USER': 'nadim',
+        'PASSWORD': 'CMSPass1982',
+        'HOST': 'cms-database.cvgqmi4eskm2.us-east-1.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
